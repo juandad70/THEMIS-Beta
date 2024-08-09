@@ -37,7 +37,7 @@ public class PeopleController {
         return ResponseEntity.ok(peopleService.updatePeople(id, peopleDTO));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deletePeople(@PathVariable Long id) {
         peopleService.deletePeople(id);
         return ResponseEntity.noContent().build();
@@ -48,3 +48,4 @@ public class PeopleController {
 // http://localhost:8080/api/people
 
 //http://localhost:8080/api/people/1  put o dile
+
