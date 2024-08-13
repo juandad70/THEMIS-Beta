@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
@@ -31,9 +32,11 @@ public class Users implements Serializable {
     private String status;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_id_roles", referencedColumnName = "id")
-    private Roles fk_id_roles;
+    @JoinColumn(name = "fk_id_role", referencedColumnName = "id")
+    @ToString.Exclude
+    private Role fk_id_role;
 
-    @OneToMany(mappedBy = "fk_id_user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<People> peopleSet;
+    @OneToMany(mappedBy = "fk_id_users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private List<People> peopleList;
 }

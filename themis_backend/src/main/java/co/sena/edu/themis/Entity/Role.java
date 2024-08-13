@@ -4,17 +4,18 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
-@Table(name = "Roles")
+@Table(name = "Role")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Roles implements Serializable {
+public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +25,7 @@ public class Roles implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "fk_id_roles", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Users> usersSet;
+    @OneToMany(mappedBy = "fk_id_role", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private List<Users> usersList;
 }

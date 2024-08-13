@@ -1,16 +1,18 @@
 package co.sena.edu.themis.Entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "People")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class People implements Serializable {
 
@@ -32,17 +34,11 @@ public class People implements Serializable {
     private Long phone;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_id_user", referencedColumnName = "document")
-    private Users fk_id_user;
+    @JoinColumn(name = "fk_id_users", referencedColumnName = "document")
+    @ToString.Exclude
+    private Users fk_id_users;
 
     @OneToMany(mappedBy = "fk_id_people", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Novelty> noveltySet = new HashSet<>();
-
-    public People(Long id, String name, String lastName, String email, Long phone) {
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone = phone;
-    }
+    @ToString.Exclude
+    private List<Novelty> noveltyList;
 }
