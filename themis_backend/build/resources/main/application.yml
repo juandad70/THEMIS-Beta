@@ -1,11 +1,11 @@
-server:
+erver:
   port: 8080
 
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/Themis
-    username: fabrica
-    password: fabrica2024*
+    username: postgres
+    password: fabrica2023*
     driverClassName: org.postgresql.Driver
 
   jpa:

@@ -27,7 +27,7 @@ public class ResponseHttpApi {
         return response;
     }
 
-    public static Map<String, Object> responseHttpFind(String result, Object data, HttpStatus codeMessage) {
+    public static Map<String, Object> responseHttpFindById(String result, Object data, HttpStatus codeMessage) {
         Map<String, Object> response = new HashMap<>();
         response.put("date", new Date());
         response.put("code", codeMessage.value());
@@ -67,5 +67,6 @@ public class ResponseHttpApi {
         response.put("message",result);
         response.put("title",data);
         return response;
+
     }
 }

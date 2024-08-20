@@ -1,20 +1,15 @@
 package co.sena.edu.themis.Service.Dao;
 
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface Idao<T, Id> {
-    public List<T> findAll();
-    public T getById(Id id);
-
-    @Transactional
-    public void save(T obje);
-
-    @Transactional
-    public void delete(Long id);
-
-    public Page<T> findAllPage(PageRequest pageable);
+public interface Idao <T, ID>{
+    List<T> findAll();
+    T getById(ID id);
+    void save(T entity);
+    void deleteById(ID id);
+    Page<T> findAll(Pageable pageable);
 }
