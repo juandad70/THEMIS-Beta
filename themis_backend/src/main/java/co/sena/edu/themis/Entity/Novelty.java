@@ -45,7 +45,7 @@ public class Novelty implements Serializable {
     private String fundaments;
 
     @Column(name = "files", nullable = true)
-    private String files;  // Cambiado a String para almacenar la ruta del archivo
+    private String files;
 
     @Column(name = "status", nullable = false)
     private String status;
@@ -53,10 +53,24 @@ public class Novelty implements Serializable {
     @Column(name = "tramit_condition", nullable = false)
     private String tramitCondition;
 
-
-
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_people", referencedColumnName = "id")
     @ToString.Exclude
     private People fk_id_people;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_id_notification", referencedColumnName = "id")
+    @ToString.Exclude
+    private Notification fk_id_notification;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_id_proces", referencedColumnName = "id")
+    @ToString.Exclude
+    private Proces fk_id_proces;
+
+    // Agregar este atributo para la relación con Applicationletter
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_id_applicationletter", referencedColumnName = "id")
+    @ToString.Exclude
+    private Applicationletter applicationletter;
 }

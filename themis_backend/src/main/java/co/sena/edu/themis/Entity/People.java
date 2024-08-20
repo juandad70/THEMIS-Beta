@@ -41,4 +41,14 @@ public class People implements Serializable {
     @OneToMany(mappedBy = "fk_id_people", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<Novelty> noveltyList;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_id_program", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
+    private Program fk_id_program;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_id_studentsheet", referencedColumnName = "id", nullable = false)
+    @ToString.Exclude
+    private StudentSheet fk_id_studentsheet;
 }
