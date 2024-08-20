@@ -50,7 +50,4 @@ public class NoveltyController {
             return new ResponseEntity<>(ResponseHttpApi.responseHttpError(customE.getTitle(), customE.getHttpStatus(), customE.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
-
-
-
 }
