@@ -1,18 +1,25 @@
-server:
-  port: 8081
+erver:
+  port: 8080
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/themis
+    url: jdbc:postgresql://localhost:5432/Themis
     username: postgres
-    password: root
+    password: fabrica2024*
     driverClassName: org.postgresql.Driver
 
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
     show-sql: true
     hibernate:
       ddl-auto: update
 
+  servlet:
+    multipart:
+      enabled: true
+      location: /tmp/uploads
+      max-file-size: 5MB
+      max-request-size: 5MB
