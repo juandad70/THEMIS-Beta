@@ -13,15 +13,16 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Coordination implements Serializable{
+public class Coordination implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", nullable = false)
     private Long id;
+
     @Column(name="name", nullable = false, length = 45)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_committee", referencedColumnName = "id")
-    private Committee fk_id_committee;
+    private Committee committee; // Cambio de 'fk_id_committee' a 'committee' para coincidir con el mappedBy en Committee
 }

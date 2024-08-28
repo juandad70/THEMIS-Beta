@@ -20,6 +20,7 @@ public class Committee implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
     @Column(name = "committee_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date committee_date;
@@ -33,5 +34,5 @@ public class Committee implements Serializable {
     private Person fk_id_people;
 
     @OneToMany(mappedBy = "committee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Coordination>  coordinationSet;
+    private Set<Coordination> coordinationSet;
 }

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.Date;
 
-
 @Entity
 @Table(name="applications_letters")
 @NoArgsConstructor
@@ -20,11 +19,14 @@ public class ApplicationLetter implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
     @Column(name = "applica_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date applica_date;
+
     @Column(name = "fundament", nullable = false)
     private String fundament;
+
     @Column(name = "signature", nullable = false, length = 50)
     private String signature;
 
@@ -42,6 +44,5 @@ public class ApplicationLetter implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_nov_type", referencedColumnName = "id")
-    private NoveltyType fk_id_nov_type;
+    private NoveltyType noveltyType; // Renombrado de 'fk_id_nov_type' a 'noveltyType'
 }
-
