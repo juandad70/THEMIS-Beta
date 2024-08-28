@@ -20,15 +20,20 @@ public class NoveltyType implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
     @Column(name = "novel_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date novel_date;
+
     @Column(name = "novel_type", nullable = false, length = 55)
     private String novel_type;
+
     @Column(name = "novel_state", nullable = false, length = 55)
     private String novel_state;
+
     @Column(name= "sofia_certainty", nullable = false)
     private String sofia_certainty;
+
     @Column(name="description", nullable = false)
     private String description;
 

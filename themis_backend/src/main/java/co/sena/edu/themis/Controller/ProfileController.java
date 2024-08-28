@@ -26,8 +26,11 @@ public class ProfileController {
     public ResponseEntity<Student> updateProfile(@PathVariable Long id, @RequestBody Person person) {
         return studentRepository.findById(id)
                 .map(student -> {
+                    // Actualiza los campos de la entidad Person en el objeto Student
                     student.getPerson().setEmail(person.getEmail());
                     student.getPerson().setPhone(person.getPhone());
+
+                    // Guarda los cambios en la base de datos
                     Student updatedStudent = studentRepository.save(student);
                     return ResponseEntity.ok(updatedStudent);
                 })
