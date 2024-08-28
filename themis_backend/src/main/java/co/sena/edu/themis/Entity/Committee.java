@@ -35,4 +35,5 @@ public class Committee implements Serializable {
 
     @OneToMany(mappedBy = "committee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Coordination> coordinationSet;
+
 }

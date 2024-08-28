@@ -25,4 +25,5 @@ public class Coordination implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_committee", referencedColumnName = "id")
     private Committee committee; // Cambio de 'fk_id_committee' a 'committee' para coincidir con el mappedBy en Committee
+
 }

@@ -1,11 +1,9 @@
 package co.sena.edu.themis.Entity;
 
 import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -37,6 +35,9 @@ public class NoveltyType implements Serializable {
     @Column(name="description", nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "noveltyType", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "noveltyType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Novelty> novelties;
+
+    @OneToMany(mappedBy = "noveltyType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ApplicationLetter> applicationLetterSet;
 }

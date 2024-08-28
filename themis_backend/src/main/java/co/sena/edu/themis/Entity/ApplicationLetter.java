@@ -45,4 +45,5 @@ public class ApplicationLetter implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_nov_type", referencedColumnName = "id")
     private NoveltyType noveltyType; // Renombrado de 'fk_id_nov_type' a 'noveltyType'
+
 }

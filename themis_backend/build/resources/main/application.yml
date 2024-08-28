@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/Themis
     username: postgres
-    password: fabrica2024*
+    password: fabrica2023*
     driverClassName: org.postgresql.Driver
 
   jpa:
