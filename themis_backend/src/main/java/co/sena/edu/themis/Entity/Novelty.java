@@ -42,4 +42,5 @@ public class Novelty implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_notification", referencedColumnName = "id")
     private Notification fk_id_notification;
+
 }

@@ -1,7 +1,9 @@
 package co.sena.edu.themis.Service;
 
+
 import co.sena.edu.themis.Entity.FileEntity;
 import co.sena.edu.themis.Response.ResponseFile;
+import org.eclipse.angus.mail.iap.Response;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
@@ -13,7 +15,8 @@ import java.util.UUID;
 public interface FileService {
     FileEntity store(MultipartFile file) throws IOException;
 
-    Optional<FileEntity> getFile(UUID id) throws FileNotFoundException;
+    Optional<FileEntity> getFile(UUID id ) throws FileNotFoundException;
 
     List<ResponseFile> getAllFiles();
+
 }
