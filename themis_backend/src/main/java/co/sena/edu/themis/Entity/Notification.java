@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="notifications")
@@ -29,4 +30,7 @@ public class Notification implements Serializable{
     @Column(name="registration_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date registration_date;
+
+    @OneToMany(mappedBy = "fk_id_notification", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Novelty> noveltyList;
 }

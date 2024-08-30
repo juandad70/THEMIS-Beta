@@ -14,7 +14,7 @@ public class ApplicationLetterDto {
     private Date applica_date;
     private String fundament;
     private String signature;
-    private PersonDto fk_id_people;
+    private PersonDto fk_id_person;
     private StudySheetDto fk_id_study_sheet;
     private ProgramDto fk_id_program;
     private NoveltyTypeDto fk_id_nov_type;

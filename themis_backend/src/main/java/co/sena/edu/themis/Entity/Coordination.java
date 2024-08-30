@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name="coordinations")
@@ -24,6 +25,12 @@ public class Coordination implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_committee", referencedColumnName = "id")
-    private Committee committee; // Cambio de 'fk_id_committee' a 'committee' para coincidir con el mappedBy en Committee
+    private Committee fk_id_committee;
+
+    @OneToMany(mappedBy = "fk_id_coordination", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Novelty> noveltyList;
+
+    @OneToMany(mappedBy = "fk_id_coordination", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Program> programList;
 
 }

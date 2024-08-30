@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,10 +31,10 @@ public class Committee implements Serializable {
     private Proceeding fk_id_proceeding;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_id_people", referencedColumnName = "id")
-    private Person fk_id_people;
+    @JoinColumn(name = "fk_id_person", referencedColumnName = "id")
+    private Person fk_id_person;
 
-    @OneToMany(mappedBy = "committee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Coordination> coordinationSet;
+    @OneToMany(mappedBy = "fk_id_committee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Coordination> coordinationList;
 
 }

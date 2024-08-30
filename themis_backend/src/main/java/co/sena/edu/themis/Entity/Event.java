@@ -26,6 +26,6 @@ public class Event implements Serializable {
     private Proceeding fk_id_proceeding;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_id_student", referencedColumnName = "id")
-    private Student fk_id_student;
+    @JoinColumn(name = "fk_id_person", referencedColumnName = "id")
+    private Person fk_id_person;
 }

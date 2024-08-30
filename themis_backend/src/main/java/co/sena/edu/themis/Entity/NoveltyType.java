@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -35,9 +36,9 @@ public class NoveltyType implements Serializable {
     @Column(name="description", nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "noveltyType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Novelty> novelties;
+    @OneToMany(mappedBy = "fk_id_novelty_type", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Novelty> noveltyList;
 
-    @OneToMany(mappedBy = "noveltyType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<ApplicationLetter> applicationLetterSet;
+    @OneToMany(mappedBy = "fk_id_nov_type", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ApplicationLetter> applicationLetterList;
 }

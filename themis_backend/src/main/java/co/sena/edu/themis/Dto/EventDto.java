@@ -12,5 +12,5 @@ public class EventDto {
     private Long id;
     private String event_file;
     private ProceedingDto fk_id_proceeding;
-    private StudentDto fk_id_student;
+    private PersonDto fk_id_person;
 }

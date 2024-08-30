@@ -31,8 +31,8 @@ public class ApplicationLetter implements Serializable {
     private String signature;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_id_people", referencedColumnName = "id")
-    private Person fk_id_people;
+    @JoinColumn(name = "fk_id_person", referencedColumnName = "id")
+    private Person fk_id_person;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_study_sheet", referencedColumnName = "id")
@@ -44,6 +44,6 @@ public class ApplicationLetter implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_nov_type", referencedColumnName = "id")
-    private NoveltyType noveltyType; // Renombrado de 'fk_id_nov_type' a 'noveltyType'
+    private NoveltyType fk_id_nov_type;
 
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name="programs")
@@ -29,4 +30,10 @@ public class Program implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_coordination", referencedColumnName = "id")
     private Coordination fk_id_coordination;
+
+    @OneToMany(mappedBy = "fk_id_program", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<StudySheet> studySheetList;
+
+    @OneToMany(mappedBy = "fk_id_program", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ApplicationLetter> applicationLetterList;
 }

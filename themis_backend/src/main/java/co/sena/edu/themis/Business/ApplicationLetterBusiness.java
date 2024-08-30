@@ -58,7 +58,7 @@ public class ApplicationLetterBusiness {
             throw new CustomException("Not found", "Not found application letter with that id", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            throw new CustomException("Error", "Error getting by id application letter", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("Error", "Error getting application letter by id", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -81,7 +81,7 @@ public class ApplicationLetterBusiness {
             }
 
             ApplicationLetter existingApplicationLetter = applicationLetterService.getById(applicationLetterDto.getId());
-            logger.info("Novelty: {}" + existingApplicationLetter);
+            logger.info("Application letter: {}" + existingApplicationLetter);
 
             ApplicationLetter updatedApplicationLetter = modelMapper.map(applicationLetterDto, ApplicationLetter.class);
             applicationLetterService.save(updatedApplicationLetter);
@@ -89,28 +89,28 @@ public class ApplicationLetterBusiness {
             return true;
         } catch (EntityNotFoundException entNotFound) {
             logger.info("The application letter you are trying to update is not registered");
-            throw new CustomException("Error", "Can't update the application letter because it isn't registered!", HttpStatus.NOT_FOUND);
+            throw new CustomException("Not Found", "Can't update the application letter because it isn't registered!", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new CustomException("Error", "Error update application letter", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public boolean deleteApplicationLetter(Long id) {
+    public boolean deleteApplicationLetterById(Long id) {
         try{
             if (id == null){
                 logger.info("Can't delete application letter because the id is null!");
             }
 
             ApplicationLetter deletingApplicationLetter = applicationLetterService.getById(id);
-            logger.info("Novelty: {}" + deletingApplicationLetter);
+            logger.info("Application letter: {}" + deletingApplicationLetter);
 
             applicationLetterService.deleteById(id);
             logger.info("Application letter deleted successfully");
             return true;
         } catch (EntityNotFoundException entNotFound) {
             logger.info("The application letter you are trying to delete is not registered");
-            throw new CustomException("Error", "Can't delete the application letter because it isn't registered!", HttpStatus.NOT_FOUND);
+            throw new CustomException("Not Found", "Can't delete the application letter because it isn't registered!", HttpStatus.NOT_FOUND);
         } catch (Exception e){
             logger.error(e.getMessage());
             throw new CustomException("Error", "Error delete application letter", HttpStatus.INTERNAL_SERVER_ERROR);

@@ -88,14 +88,14 @@ public class CommitteeBusiness {
             return true;
         } catch (EntityNotFoundException entNotFound) {
             logger.info("The committee you are trying to update is not registered");
-            throw new CustomException("Error", "Can't update the committee because it isn't registered!", HttpStatus.NOT_FOUND);
+            throw new CustomException("Not found", "Can't update the committee because it isn't registered!", HttpStatus.NOT_FOUND);
         } catch (Exception e){
             logger.error(e.getMessage());
             throw new CustomException("Error", "Error update committee", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public boolean deleteCommittee(Long id) {
+    public boolean deleteCommitteeById(Long id) {
         try {
             if (id == null) {
                 logger.info("Can't delete committee because the id is null");
@@ -109,7 +109,7 @@ public class CommitteeBusiness {
             return true;
         } catch (EntityNotFoundException entNotFound) {
             logger.info("The committee you are trying to delete is not registered");
-            throw new CustomException("Error", "Can't delete the committee because it isn't registered!", HttpStatus.NOT_FOUND);
+            throw new CustomException("Not Found", "Can't delete the committee because it isn't registered!", HttpStatus.NOT_FOUND);
         } catch (Exception e){
             logger.error(e.getMessage());
             throw new CustomException("Error", "Error delete committee", HttpStatus.INTERNAL_SERVER_ERROR);

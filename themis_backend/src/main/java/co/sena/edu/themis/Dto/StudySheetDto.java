@@ -14,6 +14,6 @@ public class StudySheetDto {
     private Date start_date;
     private Date end_date;
     private int number_students;
-    private StudentDto fk_id_student;
+    private PersonDto fk_id_person;
     private ProgramDto fk_id_program;
 }

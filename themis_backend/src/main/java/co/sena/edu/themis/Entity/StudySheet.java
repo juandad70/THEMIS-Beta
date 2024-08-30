@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="study_sheets")
@@ -29,11 +30,14 @@ public class StudySheet implements Serializable {
     private int number_students;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_id_student", referencedColumnName = "id")
-    private Student fk_id_student;
+    @JoinColumn(name = "fk_id_person", referencedColumnName = "id")
+    private Person fk_id_person;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_program", referencedColumnName = "id")
     private Program fk_id_program;
+
+    @OneToMany(mappedBy = "fk_id_study_sheet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ApplicationLetter> applicationLetterList;
 
 }

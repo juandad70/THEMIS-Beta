@@ -30,17 +30,17 @@ public class Novelty implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_novelty_type", referencedColumnName = "id")
-    private NoveltyType noveltyType;
+    private NoveltyType fk_id_novelty_type;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_id_student", referencedColumnName = "id")
-    private Student student;
+    @JoinColumn(name = "fk_id_person", referencedColumnName = "id")
+    private Person fk_id_person;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_coordination", referencedColumnName = "id")
-    private Coordination coordination;
+    private Coordination fk_id_coordination;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_notification", referencedColumnName = "id")
-    private Notification notification;
+    private Notification fk_id_notification;
 }
