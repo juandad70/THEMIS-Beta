@@ -1,7 +1,6 @@
 package co.sena.edu.themis.Entity;
 
 import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,13 +17,15 @@ public class Program implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
     @Column(name = "program_name", nullable = false, length = 45)
-    private String program_name;
+    private String programName; // Usar camelCase
+
     @Column(name = "description", nullable = false)
     private String description;
+
     @Column(name = "status", nullable = false, length = 55)
     private String status;
-
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_coordination", referencedColumnName = "id")
