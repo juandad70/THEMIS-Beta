@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -26,8 +28,12 @@ public class User {
     @Column(name = "type_document")
     private String type_document;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_id_role", referencedColumnName = "id")
-    private Role fk_id_role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "fk_id_user", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "fk_id_role", referencedColumnName = "id")
+    )
+    private List<Role> roleList;
 
 }

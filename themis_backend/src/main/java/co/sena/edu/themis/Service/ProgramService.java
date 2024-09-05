@@ -2,7 +2,6 @@ package co.sena.edu.themis.Service;
 
 import co.sena.edu.themis.Entity.Program;
 import co.sena.edu.themis.Repository.ProgramRepository;
-import co.sena.edu.themis.Service.Dao.IProgramDao;
 import co.sena.edu.themis.Service.Dao.Idao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProgramService implements Idao <Program, Long>{
