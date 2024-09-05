@@ -28,7 +28,7 @@ public class User {
     @Column(name = "type_document")
     private String type_document;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "fk_id_user", referencedColumnName = "id"),
