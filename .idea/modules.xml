@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/THEMIS-Beta.iml" filepath="$PROJECT_DIR$/.idea/THEMIS-Beta.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/temis.iml" filepath="$PROJECT_DIR$/.idea/modules/temis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/temis.main.iml" filepath="$PROJECT_DIR$/.idea/modules/temis.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/temis.test.iml" filepath="$PROJECT_DIR$/.idea/modules/temis.test.iml" />
     </modules>
   </component>
 </project>
