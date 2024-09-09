@@ -4,13 +4,11 @@ import co.sena.edu.themis.Business.CoordinationBusiness;
 import co.sena.edu.themis.Dto.CoordinationDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +48,56 @@ public class CoordinationController {
         }
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<Map<String, Object>> createCoordination(@RequestBody Map<String, Object> requestBody) {
+        try {
+            CoordinationDto coordinationDto = convertMapToCoordinationDto(requestBody);
+            boolean created = coordinationBusiness.createCoordination(coordinationDto);
+            if (created) {
+                return ResponseEntity.status(HttpStatus.CREATED)
+                        .body(ResponseHttpApi.responseHttpPost("Coordination created successfully", HttpStatus.CREATED));
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ResponseHttpApi.responseHttpError( "Coordination created failed", HttpStatus.INTERNAL_SERVER_ERROR, "CreationError"));
+            }
+        } catch (CustomException customE) {
+            return handleCustomException(customE);
+        }
+    }
 
+    @PutMapping("/update")
+    public ResponseEntity<Map<String, Object>> updateCoordination(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) {
+        try {
+            CoordinationDto coordinationDto = convertMapToCoordinationDto(requestBody);
+            coordinationDto.setId(id);
+            boolean coordinationUpdated = coordinationBusiness.updateCoordination(coordinationDto);
+            if (coordinationUpdated) {
+                return ResponseEntity.ok(ResponseHttpApi.responseHttpPut("Coordination updated successfully", HttpStatus.OK));
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ResponseHttpApi.responseHttpError("Coordination updated failed", HttpStatus.INTERNAL_SERVER_ERROR, "UpdatedFailed"));
+            }
+        } catch (CustomException customE) {
+            return handleCustomException(customE);
+        }
+    }
+
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, Object>> deleteCoordinationById(@PathVariable Long id) {
+        try {
+            boolean coordinationDeleted = coordinationBusiness.deleteCoordinationById(id);
+            if (coordinationDeleted) {
+                return ResponseEntity.ok(ResponseHttpApi.responseHttpDelete("Coordination deleted sucessfully", HttpStatus.OK));
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ResponseHttpApi.responseHttpError("Coordination deleted failed", HttpStatus.INTERNAL_SERVER_ERROR, "DeletedFailed"));
+            }
+        } catch (CustomException customE) {
+            return handleCustomException(customE);
+        }
+    }
+    
 
 
     private Map<String, Object> convertCoordinationDtoToMap(CoordinationDto coordinationDto) {

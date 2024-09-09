@@ -65,6 +65,18 @@ public class NoveltyTypeBusiness {
         }
     }
 
+    public boolean createNoveltyType(NoveltyTypeDto noveltyTypeDto) {
+        try {
+            NoveltyType noveltyType = modelMapper.map(noveltyTypeDto, NoveltyType.class);
+            noveltyTypeService.save(noveltyType);
+            logger.info("Novelty type created successfully");
+            return true;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new CustomException("Error", "Error creating novelty type", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public boolean updateNoveltyType(NoveltyTypeDto noveltyTypeDto) {
         try {
             if (noveltyTypeDto.getId() == null) {
