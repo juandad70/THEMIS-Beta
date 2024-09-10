@@ -36,16 +36,13 @@ public class PersonController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getPersonById(@PathVariable Long id) {
         try {
-            List<PersonDto> personDtos = personBusiness.findById(id);
-            if (personDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Person not found", HttpStatus.NOT_FOUND, "PersonNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Person retrieved successfully", convertPersonDtoToMap(personDtos.get(0)), HttpStatus.OK));
-        } catch (CustomException customE) {
-            return handleCustomException(customE);
+            PersonDto personDto = personBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Person retrieved successfully", convertPersonDtoToMap(personDto), HttpStatus.OK));
+        } catch (CustomException e) {
+            return handleCustomException(e);
         }
     }
+
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createPerson(@RequestBody Map<String, Object> json) {
@@ -54,7 +51,7 @@ public class PersonController {
             boolean personCreated = personBusiness.createPerson(personDto);
             if (personCreated) {
                 return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(ResponseHttpApi.responseHttpPost("Person created successfully", HttpStatus.CREATED));
+                        .body(ResponseHttpApi.responseHttpPost("Person controller created successfully", HttpStatus.CREATED));
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(ResponseHttpApi.responseHttpError("Person creation failed", HttpStatus.INTERNAL_SERVER_ERROR, "CreationError"));

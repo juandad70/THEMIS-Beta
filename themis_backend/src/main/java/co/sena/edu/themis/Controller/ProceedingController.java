@@ -81,6 +81,21 @@ public class ProceedingController {
         }
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, Object>> deleteProceeding(@PathVariable Long id) {
+        try {
+            boolean proceedingDeleted = proceedingBusiness.deleteProceedingById(id);
+            if (proceedingDeleted) {
+                return ResponseEntity.ok(ResponseHttpApi.responseHttpDelete("Proceeding deleted successfully", HttpStatus.OK));
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ResponseHttpApi.responseHttpError("Proceeding deletion failed", HttpStatus.INTERNAL_SERVER_ERROR, "DeletionError"));
+            }
+        } catch (CustomException customE) {
+            return handleCustomException(customE);
+        }
+    }
+
 
     private Map<String, Object> convertProceedingDtoToMap(ProceedingDto proceedingDto) {
         Map<String, Object> map = new HashMap<>();

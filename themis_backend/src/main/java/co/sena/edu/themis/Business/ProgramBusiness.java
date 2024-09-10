@@ -41,16 +41,14 @@ public class ProgramBusiness {
         }
     }
 
-    public List<ProgramDto> findById(Long id) {
-        List<ProgramDto> programDtoList = new ArrayList<>();
+    public ProgramDto findById(Long id) {
         try {
             Program program = programService.getById(id);
             logger.info("Program: {}" + program);
             if (program != null) {
-                programDtoList.add(modelMapper.map(program, ProgramDto.class));
-                return programDtoList;
+                return modelMapper.map(program, ProgramDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not Found", "Not found program with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());
@@ -60,6 +58,7 @@ public class ProgramBusiness {
             throw new CustomException("Error", "Error getting program by id", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     public boolean createProgram(ProgramDto programDto){
         try {
