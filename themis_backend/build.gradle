@@ -41,7 +41,7 @@ dependencies {
 	implementation group: 'log4j', name: 'log4j', version: '1.2.17'
 	// https://mvnrepository.com/artifact/org.modelmapper/modelmapper
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.2.0'
-
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

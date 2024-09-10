@@ -1,10 +1,10 @@
-erver:
+server:
   port: 8080
 
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/Themis
-    username: fabrica
+    username: postgres
     password: fabrica2024*
     driverClassName: org.postgresql.Driver
 
@@ -16,6 +16,18 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: juantriana716@gmail.com
+    password: lgtkebqgwmbaoxnm
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
   servlet:
     multipart:
