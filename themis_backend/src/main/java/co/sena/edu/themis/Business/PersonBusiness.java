@@ -41,16 +41,14 @@ public class PersonBusiness {
         }
     }
 
-    public List<PersonDto> findById(Long id) {
-        List<PersonDto> personDtoList = new ArrayList<>();
+    public PersonDto findById(Long id) {
         try {
-            Person person = personService.getById(id);
+            Person person = personService.getById(id); // Asumiendo que `getById` lanza una excepción si no encuentra la persona
             logger.info("Person: {}" + person);
             if (person != null) {
-                personDtoList.add(modelMapper.map(person, PersonDto.class));
-                return personDtoList;
+                return modelMapper.map(person, PersonDto.class); // Devuelve directamente el DTO
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not found", "Not found person with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());
@@ -60,6 +58,7 @@ public class PersonBusiness {
             throw new CustomException("Error", "Error getting person by id", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     public boolean createPerson(PersonDto personDto) {
         try {

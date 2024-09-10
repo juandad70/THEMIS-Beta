@@ -33,19 +33,16 @@ public class ProgramController {
         }
     }
 
-    @GetMapping("/all/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getProgramById(@PathVariable Long id) {
         try {
-            List<ProgramDto> programDtos = programBusiness.findById(id);
-            if (programDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Program not found", HttpStatus.NOT_FOUND, "ProgramNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Program retrieved successfully", convertProgramDtoToMap(programDtos.get(0)), HttpStatus.OK));
+            ProgramDto programDto = programBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Program retrieved successfully", convertProgramDtoToMap(programDto), HttpStatus.OK));
         } catch (CustomException e) {
             return handleCustomException(e);
         }
     }
+
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createProgram(@RequestBody Map<String, Object> requestBody) {
