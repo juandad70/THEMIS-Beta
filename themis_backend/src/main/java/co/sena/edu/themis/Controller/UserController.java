@@ -2,6 +2,7 @@ package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.UserBusiness;
 import co.sena.edu.themis.Dto.ProgramDto;
+import co.sena.edu.themis.Dto.RoleDto;
 import co.sena.edu.themis.Dto.UserDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
@@ -101,11 +102,20 @@ public class UserController {
         Map<String, Object> map = new HashMap<>();
         if (userDto.getDocument() != null) {
             map.put("document", userDto.getDocument());
-        } else {
-            map.put("document", ""); // O un valor por defecto adecuado
         }
         map.put("password", userDto.getPassword());
         map.put("type_document", userDto.getType_document());
+        // Agregar la información del rol
+        if (userDto.getFk_id_role() != null) {
+            map.put("role", convertRoleDtoToMap(userDto.getFk_id_role()));
+        }
+        return map;
+    }
+
+    private Map<String, Object> convertRoleDtoToMap(RoleDto roleDto) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", roleDto.getId());
+        map.put("name", roleDto.getName());
         return map;
     }
 
