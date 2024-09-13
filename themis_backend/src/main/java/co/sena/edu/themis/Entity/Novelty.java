@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="novelties")
@@ -28,6 +29,9 @@ public class Novelty implements Serializable {
     @Column(name = "status", nullable = false, length = 55)
     private String status;
 
+    @Column(name = "image", nullable = false, length = 255)
+    private String image;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_novelty_type", referencedColumnName = "id")
     private NoveltyType fk_id_novelty_type;
@@ -40,7 +44,6 @@ public class Novelty implements Serializable {
     @JoinColumn(name = "fk_id_coordination", referencedColumnName = "id")
     private Coordination fk_id_coordination;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_id_notification", referencedColumnName = "id")
-    private Notification fk_id_notification;
+    @OneToMany(mappedBy = "fk_id_novelty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Notification> noveltyList;
 }

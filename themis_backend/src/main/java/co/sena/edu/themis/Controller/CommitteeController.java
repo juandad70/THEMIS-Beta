@@ -4,11 +4,14 @@ import co.sena.edu.themis.Business.CommitteeBusiness;
 import co.sena.edu.themis.Dto.CommitteeDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -120,8 +123,20 @@ public class CommitteeController {
     }
 
     private CommitteeDto convertMapCommitteeDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObject = jsonObject.getJSONObject("data");
         CommitteeDto committeeDto = new CommitteeDto();
-        committeeDto.setCommittee_date((Date) map.get("committee_date"));
+
+        String committeeDateStr = dataObject.getString("committee_date");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date committeeDate = null;
+        try {
+            committeeDate = sdf.parse(committeeDateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        committeeDto.setCommittee_date(committeeDate);
+
         return committeeDto;
     }
 

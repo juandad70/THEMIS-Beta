@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserBusiness {
@@ -39,9 +40,12 @@ public class UserBusiness {
 
             Page<UserDto> userDtoPage = users.map(user -> {
                 UserDto dto = modelMapper.map(user, UserDto.class);
-                // Convertir Role a RoleDto antes de asignar
+                // Convertir la lista de roles a una lista de RoleDto
                 if (user.getRoleList() != null) {
-                    dto.setFk_id_role(modelMapper.map(user.getRoleList(), RoleDto.class));
+                    List<RoleDto> roleDtos = user.getRoleList().stream()
+                            .map(role -> modelMapper.map(role, RoleDto.class))
+                            .collect(Collectors.toList());
+                    dto.setFk_id_role(roleDtos);
                 }
                 return dto;
             });
@@ -52,8 +56,6 @@ public class UserBusiness {
             throw new CustomException("Error", "Error getting users", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
     public List<UserDto> findById(Long id) {
         List<UserDto> userDtoList = new ArrayList<>();

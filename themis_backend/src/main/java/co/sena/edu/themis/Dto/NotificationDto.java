@@ -15,4 +15,5 @@ public class NotificationDto {
     private String notifi_status;
     private Date date_attention;
     private Date registration_date;
+    private NoveltyDto fk_id_novelty;
 }

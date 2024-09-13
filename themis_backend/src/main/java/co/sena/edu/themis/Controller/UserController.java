@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
@@ -105,12 +106,16 @@ public class UserController {
         }
         map.put("password", userDto.getPassword());
         map.put("type_document", userDto.getType_document());
-        // Agregar la información del rol
+        // Agregar la lista de roles
         if (userDto.getFk_id_role() != null) {
-            map.put("role", convertRoleDtoToMap(userDto.getFk_id_role()));
+            List<Map<String, Object>> rolesMap = userDto.getFk_id_role().stream()
+                    .map(this::convertRoleDtoToMap)
+                    .collect(Collectors.toList());
+            map.put("roles", rolesMap);
         }
         return map;
     }
+
 
     private Map<String, Object> convertRoleDtoToMap(RoleDto roleDto) {
         Map<String, Object> map = new HashMap<>();

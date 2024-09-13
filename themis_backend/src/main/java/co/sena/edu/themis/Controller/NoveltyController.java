@@ -106,6 +106,7 @@ public class NoveltyController {
         map.put("nov_date", noveltyDto.getNov_date());
         map.put("observation", noveltyDto.getObservation());
         map.put("status", noveltyDto.getStatus());
+        map.put("image", noveltyDto.getImage());
 
         //Mapeo de llave foranea de fk_id_novelty_type
         if (noveltyDto.getFk_id_novelty_type() != null) {
@@ -126,13 +127,6 @@ public class NoveltyController {
             map.put("fk_id_coordination", noveltyDto.getFk_id_coordination());
         } else  {
             map.put("fk_id_coordination", null);
-        }
-
-        //Mapeo de llave foranea de fk_id_notification
-        if (noveltyDto.getFk_id_notification() != null) {
-            map.put("fk_id_notification", noveltyDto.getFk_id_notification());
-        } else {
-            map.put("fk_id_notification", null);
         }
 
         return map;
