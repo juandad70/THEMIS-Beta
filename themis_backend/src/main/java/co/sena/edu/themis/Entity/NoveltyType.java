@@ -1,9 +1,13 @@
 package co.sena.edu.themis.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -20,23 +24,21 @@ public class NoveltyType implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "novel_date", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date novel_date;
+    @Column(name = "nameNovelty", nullable = false, length = 55)
+    private String nameNovelty;
 
-    @Column(name = "novel_type", nullable = false, length = 55)
-    private String novel_type;
+    @Column(name = "noveltyState", nullable = false, length = 55)
+    private String noveltyState;
 
-    @Column(name = "novel_state", nullable = false, length = 55)
-    private String novel_state;
-
-    @Column(name= "sofia_certainty", nullable = false)
-    private String sofia_certainty;
+    @Column(name= "sofiaCertainty")
+    private String sofiaCertainty;
 
     @Column(name="description", nullable = false)
     private String description;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "fk_id_novelty_type", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Novelty> noveltyList;
 
     @OneToMany(mappedBy = "fk_id_nov_type", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

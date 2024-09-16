@@ -41,16 +41,14 @@ public class CoordinationBusiness {
         }
     }
 
-    public List<CoordinationDto> findById(Long id) {
-        List<CoordinationDto> coordinationDtoList = new ArrayList<>();
+    public CoordinationDto findById(Long id) {
         try {
             Coordination coordination = coordinationService.getById(id);
             logger.info("Coordination: {}" + coordination);
             if (coordination != null) {
-                coordinationDtoList.add(modelMapper.map(coordination, CoordinationDto.class));
-                return coordinationDtoList;
+                return modelMapper.map(coordination, CoordinationDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not Found", "Not found coordination with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());

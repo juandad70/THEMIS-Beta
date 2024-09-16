@@ -111,6 +111,7 @@ public class PersonController {
         JSONObject jsonObject = new JSONObject(map);
         JSONObject dataObj = jsonObject.getJSONObject("data");
         PersonDto personDto = new PersonDto();
+        personDto.setId(dataObj.getLong("id"));
         personDto.setName(dataObj.getString("name"));
         personDto.setLastname(dataObj.getString("lastname"));
         personDto.setEmail(dataObj.getString("email"));

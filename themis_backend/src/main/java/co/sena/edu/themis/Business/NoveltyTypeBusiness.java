@@ -45,16 +45,14 @@ public class NoveltyTypeBusiness {
         }
     }
 
-    public List<NoveltyTypeDto> findById(Long id) {
-        List<NoveltyTypeDto> noveltyTypeDtoList = new ArrayList<>();
+    public NoveltyTypeDto findById(Long id) {
         try {
             NoveltyType noveltyType = noveltyTypeService.getById(id);
             logger.info("Novelty type: {}" + noveltyType);
             if (noveltyType != null) {
-                noveltyTypeDtoList.add(modelMapper.map(noveltyType, NoveltyTypeDto.class));
-                return noveltyTypeDtoList;
+                return modelMapper.map(noveltyType, NoveltyTypeDto.class);
             } else  {
-                return new ArrayList<>();
+                throw new CustomException("Not Found", "Not found novelty type with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());

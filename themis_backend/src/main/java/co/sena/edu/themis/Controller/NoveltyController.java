@@ -2,14 +2,20 @@ package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.NoveltyBusiness;
 
+import co.sena.edu.themis.Dto.CoordinationDto;
 import co.sena.edu.themis.Dto.NoveltyDto;
+import co.sena.edu.themis.Dto.NoveltyTypeDto;
+import co.sena.edu.themis.Dto.PersonDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,12 +45,8 @@ public class NoveltyController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getNoveltyById(@PathVariable Long id) {
         try {
-            List<NoveltyDto> noveltyDtos = noveltyBusiness.findById(id);
-            if (noveltyDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Novelty not found", HttpStatus.NOT_FOUND, "NoveltyNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Novelty retrieved successfully", convertNoveltyDtoToMap(noveltyDtos.get(0)), HttpStatus.OK));
+            NoveltyDto noveltyDtos = noveltyBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Novelty retrieved successfully", convertNoveltyDtoToMap(noveltyDtos), HttpStatus.OK));
         } catch (CustomException customE) {
             return handleCustomException(customE);
         }
@@ -103,10 +105,10 @@ public class NoveltyController {
     private Map<String, Object> convertNoveltyDtoToMap(NoveltyDto noveltyDto) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", noveltyDto.getId());
-        map.put("nov_date", noveltyDto.getNov_date());
+        map.put("noveltyDate", noveltyDto.getNoveltyDate());
         map.put("observation", noveltyDto.getObservation());
         map.put("status", noveltyDto.getStatus());
-        map.put("image", noveltyDto.getImage());
+        map.put("noveltyFiles", noveltyDto.getNoveltyFiles());
 
         //Mapeo de llave foranea de fk_id_novelty_type
         if (noveltyDto.getFk_id_novelty_type() != null) {
@@ -133,10 +135,45 @@ public class NoveltyController {
     }
 
     private NoveltyDto convertMapToNoveltyDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         NoveltyDto noveltyDto = new NoveltyDto();
-        noveltyDto.setNov_date((Date) map.get("nov_date"));
-        noveltyDto.setObservation((String) map.get("observation"));
-        noveltyDto.setStatus((String) map.get("status"));
+
+        try {
+            String noveltyDateStr = dataObj.getString("noveltyDate");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date noveltyDate = dateFormat.parse(noveltyDateStr);
+            noveltyDto.setNoveltyDate(noveltyDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        noveltyDto.setObservation(dataObj.getString("observation"));
+        noveltyDto.setStatus(dataObj.getString("status"));
+        noveltyDto.setNoveltyFiles(dataObj.getString("noveltyFiles"));
+
+        if (dataObj.has("fk_id_novelty_type")) {
+            JSONObject noveltyTypeObj = dataObj.getJSONObject("fk_id_novelty_type");
+            NoveltyTypeDto noveltyTypeDto = new NoveltyTypeDto();
+            noveltyTypeDto.setId(noveltyTypeObj.getLong("id"));
+            noveltyDto.setFk_id_novelty_type(noveltyTypeDto);
+        }
+
+        // Person
+        if (dataObj.has("fk_id_person")) {
+            JSONObject personObj = dataObj.getJSONObject("fk_id_person");
+            PersonDto personDto = new PersonDto();
+            personDto.setId(personObj.getLong("id"));
+            noveltyDto.setFk_id_person(personDto);
+        }
+
+        // Coordination
+        if (dataObj.has("fk_id_coordination")) {
+            JSONObject coordinationObj = dataObj.getJSONObject("fk_id_coordination");
+            CoordinationDto coordinationDto = new CoordinationDto();
+            coordinationDto.setId(coordinationObj.getLong("id"));
+            noveltyDto.setFk_id_coordination(coordinationDto);
+        }
         return noveltyDto;
     }
 

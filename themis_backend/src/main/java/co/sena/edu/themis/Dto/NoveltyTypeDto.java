@@ -11,9 +11,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class NoveltyTypeDto {
     private Long id;
-    private Date novel_date;
-    private String novel_type;
-    private String novel_state;
-    private String sofia_certainty;
+    private String nameNovelty;
+    private String noveltyState;
+    private String sofiaCertainty;
     private String description;
 }

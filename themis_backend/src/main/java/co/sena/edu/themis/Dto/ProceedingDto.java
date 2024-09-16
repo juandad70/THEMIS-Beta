@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class ProceedingDto {
     private Long id;
     private String name;
-    private String proceeding_file;
+    private String proceedingFile;
     private NoveltyTypeDto fk_id_nov_type;
 }

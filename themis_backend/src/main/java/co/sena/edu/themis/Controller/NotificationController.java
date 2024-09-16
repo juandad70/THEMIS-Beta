@@ -4,11 +4,14 @@ import co.sena.edu.themis.Business.NotificationBusiness;
 import co.sena.edu.themis.Dto.NotificationDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,12 +40,8 @@ public class NotificationController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getNotificationById(@PathVariable Long id) {
         try {
-            List<NotificationDto> notificationDtos = notificationBusiness.findById(id);
-            if (notificationDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Notification not found", HttpStatus.NOT_FOUND, "NotificationNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Notification retrieved successfully", convertNotificationDtoToMap(notificationDtos.get(0)), HttpStatus.OK));
+            NotificationDto notificationDtos = notificationBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Notification retrieved successfully", convertNotificationDtoToMap(notificationDtos), HttpStatus.OK));
         } catch (CustomException customE) {
             return handleCustomException(customE);
         }
@@ -101,19 +100,37 @@ public class NotificationController {
     private Map<String, Object> convertNotificationDtoToMap(NotificationDto notificationDto) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", notificationDto.getId());
-        map.put("notifi_message", notificationDto.getNotifi_message());
-        map.put("notifi_status", notificationDto.getNotifi_status());
-        map.put("date_attention", notificationDto.getDate_attention());
-        map.put("registration_date", notificationDto.getRegistration_date());
+        map.put("notiMessage", notificationDto.getNotiMessage());
+        map.put("notiStatus", notificationDto.getNotiStatus());
+        map.put("dateAttention", notificationDto.getDateAttention());
+        map.put("registrationDate", notificationDto.getRegistrationDate());
         return map;
     }
 
     private NotificationDto convertMapToNotificationDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         NotificationDto notificationDto = new NotificationDto();
-        notificationDto.setNotifi_message((String) map.get("notifi_message"));
-        notificationDto.setNotifi_status((String) map.get("notifi_status"));
-        notificationDto.setDate_attention((Date) map.get("date_attention"));
-        notificationDto.setRegistration_date((Date) map.get("registration_date"));
+        notificationDto.setNotiMessage(dataObj.getString("notiMessage"));
+        notificationDto.setNotiStatus(dataObj.getString("notiStatus"));
+        try {
+            String notificationStr = dataObj.getString("dateAttention");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateAtte = dateFormat.parse(notificationStr);
+            notificationDto.setDateAttention(dateAtte);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            String notifiStr = dataObj.getString("registrationDate");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date regisDate = dateFormat.parse(notifiStr);
+            notificationDto.setRegistrationDate(regisDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return notificationDto;
     }
 

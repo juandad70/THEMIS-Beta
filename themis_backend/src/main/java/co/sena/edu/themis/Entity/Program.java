@@ -18,8 +18,8 @@ public class Program implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "program_name", nullable = false, length = 45)
-    private String programName; // Usar camelCase
+    @Column(name = "programName", nullable = false, length = 45)
+    private String programName;
 
     @Column(name = "description", nullable = false)
     private String description;

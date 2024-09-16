@@ -57,16 +57,14 @@ public class UserBusiness {
         }
     }
 
-    public List<UserDto> findById(Long id) {
-        List<UserDto> userDtoList = new ArrayList<>();
+    public UserDto findById(Long id) {
         try {
             User user = userService.getById(id);
             logger.info("User: {}" + user);
             if (user != null) {
-                userDtoList.add(modelMapper.map(user, UserDto.class));
-                return userDtoList;
+                return modelMapper.map(user, UserDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not Found", "Not found user with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());

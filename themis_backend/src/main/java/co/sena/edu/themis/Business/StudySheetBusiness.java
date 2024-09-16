@@ -43,16 +43,14 @@ public class StudySheetBusiness {
         }
     }
 
-    public List<StudySheetDto> findById(Long id) {
-        List<StudySheetDto> studySheetDtoList = new ArrayList<>();
+    public StudySheetDto findById(Long id) {
         try {
             StudySheet studySheet = studySheetService.getById(id);
             logger.info("Study sheet: {}" + studySheet);
             if (studySheet != null) {
-                studySheetDtoList.add(modelMapper.map(studySheet, StudySheetDto.class));
-                return studySheetDtoList;
+                return modelMapper.map(studySheet, StudySheetDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not Found", "Not found study sheet wwith that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());

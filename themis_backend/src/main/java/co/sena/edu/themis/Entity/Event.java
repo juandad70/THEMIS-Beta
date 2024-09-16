@@ -18,8 +18,8 @@ public class Event implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "event_file", nullable = false)
-    private String event_file;
+    @Column(name = "eventFile", nullable = false)
+    private String eventFile;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_proceeding", referencedColumnName = "id")

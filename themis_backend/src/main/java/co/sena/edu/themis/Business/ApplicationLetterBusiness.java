@@ -42,16 +42,14 @@ public class ApplicationLetterBusiness {
         }
     }
 
-    public List<ApplicationLetterDto> findById(Long id) {
-        List<ApplicationLetterDto> applicationLetterDtoList = new ArrayList<>();
+    public ApplicationLetterDto findById(Long id) {
         try{
             ApplicationLetter applicationLetter = applicationLetterService.getById(id);
             logger.info("Application Letter: {}" + applicationLetter);
             if (applicationLetter != null){
-                applicationLetterDtoList.add(modelMapper.map(applicationLetter, ApplicationLetterDto.class));
-                return applicationLetterDtoList;
+                return modelMapper.map(applicationLetter, ApplicationLetterDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not found", "Not found application letter with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());

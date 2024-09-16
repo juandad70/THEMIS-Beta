@@ -4,11 +4,14 @@ import co.sena.edu.themis.Business.StudySheetBusiness;
 import co.sena.edu.themis.Dto.StudySheetDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,12 +40,8 @@ public class StudySheetController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getStudySheetById(@PathVariable Long id) {
         try {
-            List<StudySheetDto> studySheetDtos = studySheetBusiness.findById(id);
-            if (studySheetDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Study Sheet not found", HttpStatus.NOT_FOUND, "StudySheetNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Study Sheet retrieved successfully", convertStudySheetDtoToMap(studySheetDtos.get(0)), HttpStatus.OK));
+            StudySheetDto studySheetDtos = studySheetBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Study Sheet retrieved successfully", convertStudySheetDtoToMap(studySheetDtos), HttpStatus.OK));
         } catch (CustomException customE) {
             return handleCustomException(customE);
         }
@@ -100,9 +99,9 @@ public class StudySheetController {
     private Map<String, Object> convertStudySheetDtoToMap(StudySheetDto studySheetDto){
         Map<String, Object> map = new HashMap<>();
         map.put("id", studySheetDto.getId());
-        map.put("start_date", studySheetDto.getStart_date());
-        map.put("end_date", studySheetDto.getEnd_date());
-        map.put("number_students", studySheetDto.getNumber_students());
+        map.put("startDate", studySheetDto.getStartDate());
+        map.put("endDate", studySheetDto.getEndDate());
+        map.put("numberStudents", studySheetDto.getNumberStudents());
         if (studySheetDto.getFk_id_person() != null) {
             map.put("fk_id_person", studySheetDto.getFk_id_person());
         } else {
@@ -119,10 +118,29 @@ public class StudySheetController {
     }
 
     private StudySheetDto convertMapToStudySheetDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         StudySheetDto studySheetDto = new StudySheetDto();
-        studySheetDto.setStart_date((Date) map.get("start_date"));
-        studySheetDto.setEnd_date((Date) map.get("end_date"));
-        studySheetDto.setNumber_students((int) map.get("number_students"));
+        studySheetDto.setId(dataObj.getLong("id"));
+        try {
+            String studySheetStr = dataObj.getString("startDate");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date starDate = dateFormat.parse(studySheetStr);
+            studySheetDto.setStartDate(starDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            String studySheetStr = dataObj.getString("endDate");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date endDate = dateFormat.parse(studySheetStr);
+            studySheetDto.setEndDate(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        studySheetDto.setNumberStudents(dataObj.getInt("numberStudents"));
         return studySheetDto;
     }
 

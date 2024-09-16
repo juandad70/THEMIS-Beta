@@ -20,14 +20,14 @@ public class StudySheet implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "startDate", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date start_date;
-    @Column(name = "end_date", nullable = false)
+    private Date startDate;
+    @Column(name = "endDate", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date end_date;
-    @Column(name = "number_students", nullable = false)
-    private int number_students;
+    private Date endDate;
+    @Column(name = "numberStudents", nullable = false)
+    private int numberStudents;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_person", referencedColumnName = "id")

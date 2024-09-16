@@ -4,6 +4,7 @@ import co.sena.edu.themis.Business.ProceedingBusiness;
 import co.sena.edu.themis.Dto.ProceedingDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,12 +37,8 @@ public class ProceedingController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getAllProceedingById(@PathVariable Long id) {
         try {
-            List<ProceedingDto> proceedingDtos = proceedingBusiness.findById(id);
-            if (proceedingDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Proceeding not found", HttpStatus.NOT_FOUND, "ProceedingNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Proceeding retrieved successfully", convertProceedingDtoToMap(proceedingDtos.get(0)), HttpStatus.OK));
+            ProceedingDto proceedingDtos = proceedingBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Proceeding retrieved successfully", convertProceedingDtoToMap(proceedingDtos), HttpStatus.OK));
         } catch (CustomException e) {
             return handleCustomException(e);
         }
@@ -101,7 +98,7 @@ public class ProceedingController {
         Map<String, Object> map = new HashMap<>();
         map.put("id", proceedingDto.getId());
         map.put("name", proceedingDto.getName());
-        map.put("proceeding_file", proceedingDto.getProceeding_file());
+        map.put("proceedingFile", proceedingDto.getProceedingFile());
         if (proceedingDto.getFk_id_nov_type() != null) {
             map.put("fk_id_nov_type", proceedingDto.getFk_id_nov_type());
         } else {
@@ -111,9 +108,12 @@ public class ProceedingController {
     }
 
     private ProceedingDto convertMapToProceedingDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         ProceedingDto proceedingDto = new ProceedingDto();
-        proceedingDto.setName((String) map.get("name"));
-        proceedingDto.setProceeding_file((String) map.get("proceeding_file"));
+        proceedingDto.setId(dataObj.getLong("id"));
+        proceedingDto.setName(dataObj.getString("name"));
+        proceedingDto.setProceedingFile(dataObj.getString("proceedingFile"));
         return proceedingDto;
     }
 

@@ -22,9 +22,9 @@ public class Committee implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "committee_date", nullable = false)
+    @Column(name = "committeeDate", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date committee_date;
+    private Date committeeDate;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_proceeding", referencedColumnName = "id")

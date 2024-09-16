@@ -40,12 +40,8 @@ public class ApplicationLetterController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getApplicationLetterById(@PathVariable Long id) {
         try {
-            List<ApplicationLetterDto> applicationLetterDtos = applicationLetterBusiness.findById(id);
-            if (applicationLetterDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpFindById("Application Letter not found", convertApplicationLetterDtoToMap(applicationLetterDtos.get(0)), HttpStatus.OK));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Application letter retrieved successfully", convertApplicationLetterDtoToMap(applicationLetterDtos.get(0)), HttpStatus.OK));
+            ApplicationLetterDto applicationLetterDtos = applicationLetterBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Application letter retrieved successfully", convertApplicationLetterDtoToMap(applicationLetterDtos), HttpStatus.OK));
         } catch (CustomException customE) {
             return handleCustomException(customE);
         }
@@ -104,7 +100,7 @@ public class ApplicationLetterController {
     private Map<String, Object> convertApplicationLetterDtoToMap(ApplicationLetterDto applicationLetterDto) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", applicationLetterDto.getId());
-        map.put("applica_date", applicationLetterDto.getApplica_date());
+        map.put("applicationDate", applicationLetterDto.getApplicationDate());
         map.put("fundament", applicationLetterDto.getFundament());
         map.put("signature", applicationLetterDto.getSignature());
 
@@ -146,11 +142,11 @@ public class ApplicationLetterController {
 
         try {
             //Primero se obtiene la fecha como un String
-            String applicaDateStr = dataobj.getString("applica_date");
+            String applicaDateStr = dataobj.getString("applicationDate");
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             //Se cambia el String por Date
             Date applicaDate = dateFormat.parse(applicaDateStr);
-            applicationLetterDto.setApplica_date(applicaDate); //Se almacena en el DTO
+            applicationLetterDto.setApplicationDate(applicaDate); //Se almacena en el DTO
         } catch (ParseException e) {
             e.printStackTrace();
         }

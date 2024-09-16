@@ -41,16 +41,14 @@ public class EventBusiness {
         }
     }
 
-    public List<EventDto> findById(Long id) {
-        List<EventDto> eventDtoList = new ArrayList<>();
+    public EventDto findById(Long id) {
         try {
             Event event = eventService.getById(id);
             logger.info("Event: {}" + event);
             if (event != null) {
-                eventDtoList.add(modelMapper.map(event, EventDto.class));
-                return eventDtoList;
+                return modelMapper.map(event, EventDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not Found", "Not found event with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());

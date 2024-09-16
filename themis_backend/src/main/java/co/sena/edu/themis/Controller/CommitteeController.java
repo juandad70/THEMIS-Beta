@@ -40,12 +40,8 @@ public class CommitteeController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getCommitteeById(@PathVariable Long id) {
         try {
-            List<CommitteeDto> committeeDtos = committeeBusiness.findById(id);
-            if (committeeDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Committee not found", HttpStatus.NOT_FOUND,"CommitteNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Committee retrived successfully", convertCommitteeDtoToMap(committeeDtos.get(0)), HttpStatus.OK));
+            CommitteeDto committeeDtos = committeeBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Committee retrived successfully", convertCommitteeDtoToMap(committeeDtos), HttpStatus.OK));
         } catch (CustomException customE) {
             return handleCustomException(customE);
         }
@@ -103,7 +99,7 @@ public class CommitteeController {
     private Map<String, Object> convertCommitteeDtoToMap(CommitteeDto committeeDto){
         Map<String, Object> map = new HashMap<>();
         map.put("id", committeeDto.getId());
-        map.put("committee_date", committeeDto.getCommittee_date());
+        map.put("committeeDate", committeeDto.getCommitteeDate());
 
         //Mapear la llave foranea de fk_id_proceeding
         if (committeeDto.getFk_id_proceeding() != null) {
@@ -126,8 +122,9 @@ public class CommitteeController {
         JSONObject jsonObject = new JSONObject(map);
         JSONObject dataObject = jsonObject.getJSONObject("data");
         CommitteeDto committeeDto = new CommitteeDto();
+        committeeDto.setId(dataObject.getLong("id"));
 
-        String committeeDateStr = dataObject.getString("committee_date");
+        String committeeDateStr = dataObject.getString("committeeDate");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date committeeDate = null;
         try {
@@ -135,7 +132,7 @@ public class CommitteeController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        committeeDto.setCommittee_date(committeeDate);
+        committeeDto.setCommitteeDate(committeeDate);
 
         return committeeDto;
     }

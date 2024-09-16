@@ -20,9 +20,9 @@ public class ApplicationLetter implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "applica_date", nullable = false)
+    @Column(name = "applicationDate", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date applica_date;
+    private Date applicationDate;
 
     @Column(name = "fundament", nullable = false)
     private String fundament;

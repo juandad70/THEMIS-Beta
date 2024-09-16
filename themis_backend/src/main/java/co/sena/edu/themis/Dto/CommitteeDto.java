@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class CommitteeDto {
     private Long id;
-    private Date committee_date;
+    private Date committeeDate;
     private ProceedingDto fk_id_proceeding;
     private PersonDto fk_id_person;
 }

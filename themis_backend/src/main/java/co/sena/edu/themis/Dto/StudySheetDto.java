@@ -11,9 +11,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class StudySheetDto {
     private Long id;
-    private Date start_date;
-    private Date end_date;
-    private int number_students;
+    private Date startDate;
+    private Date endDate;
+    private int numberStudents;
     private PersonDto fk_id_person;
     private ProgramDto fk_id_program;
 }

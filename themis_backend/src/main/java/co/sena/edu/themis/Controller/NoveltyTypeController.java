@@ -7,11 +7,14 @@ import co.sena.edu.themis.Business.NoveltyTypeBusiness;
 import co.sena.edu.themis.Dto.NoveltyTypeDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,12 +43,8 @@ public class NoveltyTypeController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getNoveltyTypeById(@PathVariable Long id) {
         try {
-            List<NoveltyTypeDto> noveltyTypeDtos = noveltyTypeBusiness.findById(id);
-            if (noveltyTypeDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Novelty type not found", HttpStatus.NOT_FOUND, "NoveltyTypeNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Novelty Type retrieved successfully", convertNoveltyTypeDtoToMap(noveltyTypeDtos.get(0)), HttpStatus.OK));
+            NoveltyTypeDto noveltyTypeDtos = noveltyTypeBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Novelty Type retrieved successfully", convertNoveltyTypeDtoToMap(noveltyTypeDtos), HttpStatus.OK));
         } catch (CustomException customE) {
             return handleCustomException(customE);
         }
@@ -104,21 +103,21 @@ public class NoveltyTypeController {
     private Map<String, Object> convertNoveltyTypeDtoToMap(NoveltyTypeDto noveltyTypeDto) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", noveltyTypeDto.getId());
-        map.put("novel_date", noveltyTypeDto.getNovel_date());
-        map.put("novel_type", noveltyTypeDto.getNovel_type());
-        map.put("novel_state", noveltyTypeDto.getNovel_state());
-        map.put("sofia_certainty", noveltyTypeDto.getSofia_certainty());
+        map.put("nameNovelty", noveltyTypeDto.getNameNovelty());
+        map.put("noveltyState", noveltyTypeDto.getNoveltyState());
+        map.put("sofiaCertainty", noveltyTypeDto.getSofiaCertainty());
         map.put("description", noveltyTypeDto.getDescription());
         return map;
     }
 
     private NoveltyTypeDto convertMapToNoveltyTypeDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         NoveltyTypeDto noveltyTypeDto = new NoveltyTypeDto();
-        noveltyTypeDto.setNovel_date((Date) map.get("novel_date"));
-        noveltyTypeDto.setNovel_type((String) map.get("novel_type"));
-        noveltyTypeDto.setNovel_state((String) map.get("novel_state"));
-        noveltyTypeDto.setSofia_certainty((String) map.get("sofia_certainty"));
-        noveltyTypeDto.setDescription((String) map.get("description"));
+        noveltyTypeDto.setNameNovelty(dataObj.getString("nameNovelty"));
+        noveltyTypeDto.setNoveltyState(dataObj.getString("noveltyState"));
+        noveltyTypeDto.setSofiaCertainty(dataObj.getString("sofiaCertainty"));
+        noveltyTypeDto.setDescription(dataObj.getString("description"));
         return noveltyTypeDto;
     }
 

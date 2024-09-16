@@ -20,16 +20,16 @@ public class Notification implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", nullable = false)
     private Long id;
-    @Column(name="notifi_message", nullable = false)
-    private String notifi_message;
-    @Column(name="notifi_status", nullable = false, length = 55)
-    private String notifi_status;
-    @Column(name="date_attention", nullable = false)
+    @Column(name="notiMessage", nullable = false)
+    private String notiMessage;
+    @Column(name="notiStatus", nullable = false, length = 55)
+    private String notiStatus;
+    @Column(name="dateAttention", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date date_attention;
-    @Column(name="registration_date", nullable = false)
+    private Date dateAttention;
+    @Column(name="registrationDate", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date registration_date;
+    private Date registrationDate;
 
 
     @ManyToOne(fetch = FetchType.EAGER)

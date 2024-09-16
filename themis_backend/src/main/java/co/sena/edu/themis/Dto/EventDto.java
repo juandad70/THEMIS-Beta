@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EventDto {
     private Long id;
-    private String event_file;
+    private String eventFile;
     private ProceedingDto fk_id_proceeding;
     private PersonDto fk_id_person;
 }

@@ -6,6 +6,7 @@ import co.sena.edu.themis.Dto.RoleDto;
 import co.sena.edu.themis.Dto.UserDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,12 +40,8 @@ public class UserController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getUserById(@PathVariable Long id) {
         try {
-            List<UserDto> userDtos = userBusiness.findById(id);
-            if (userDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("User not found", HttpStatus.NOT_FOUND, "UserNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("User retrieved successfully", convertUserDtoToMap(userDtos.get(0)), HttpStatus.OK));
+            UserDto userDtos = userBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("User retrieved successfully", convertUserDtoToMap(userDtos), HttpStatus.OK));
         } catch (CustomException e) {
             return handleCustomException(e);
         }
@@ -105,7 +102,7 @@ public class UserController {
             map.put("document", userDto.getDocument());
         }
         map.put("password", userDto.getPassword());
-        map.put("type_document", userDto.getType_document());
+        map.put("typeDocument", userDto.getTypeDocument());
         // Agregar la lista de roles
         if (userDto.getFk_id_role() != null) {
             List<Map<String, Object>> rolesMap = userDto.getFk_id_role().stream()
@@ -126,19 +123,12 @@ public class UserController {
 
 
     private UserDto convertMapToUserDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         UserDto userDto = new UserDto();
-
-        // Verificar y convertir el campo 'document' al tipo Long
-        Object documentObj = map.get("document");
-        if (documentObj != null) {
-            if (documentObj instanceof Integer) {
-                userDto.setDocument(((Integer) documentObj).longValue()); // Convertir Integer a Long
-            } else if (documentObj instanceof Long) {
-                userDto.setDocument((Long) documentObj); // Ya es Long
-            }
-        }
-        userDto.setPassword((String) map.get("password"));
-        userDto.setType_document((String) map.get("type_document"));
+        userDto.setDocument(dataObj.getLong("document"));
+        userDto.setPassword(dataObj.getString("password"));
+        userDto.setTypeDocument(dataObj.getString("typeDocument"));
         return userDto;
     }
 

@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class ApplicationLetterDto {
     private Long id;
-    private Date applica_date;
+    private Date applicationDate;
     private String fundament;
     private String signature;
     private PersonDto fk_id_person;

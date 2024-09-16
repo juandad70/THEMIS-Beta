@@ -6,6 +6,7 @@ import co.sena.edu.themis.Dto.RoleDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
 import org.hibernate.collection.spi.MapSemantics;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +39,8 @@ public class RoleController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getRoleById(@PathVariable Long id) {
         try {
-            List<RoleDto> roleDtos = roleBusiness.findById(id);
-            if (roleDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Role not found", HttpStatus.NOT_FOUND, "RoleNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Role retrieved successfully", convertRoleDtoToMap(roleDtos.get(0)), HttpStatus.OK));
+            RoleDto roleDtos = roleBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Role retrieved successfully", convertRoleDtoToMap(roleDtos), HttpStatus.OK));
         } catch (CustomException customE)  {
             return handleCustomException(customE);
         }
@@ -107,8 +104,10 @@ public class RoleController {
     }
 
     private RoleDto convertMapToRoleDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         RoleDto roleDto = new RoleDto();
-        roleDto.setName((String) map.get("name"));
+        roleDto.setName(dataObj.getString("name"));
         return roleDto;
     }
 

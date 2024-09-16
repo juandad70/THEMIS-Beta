@@ -43,16 +43,14 @@ public class NotificationBusiness {
         }
     }
 
-    public List<NotificationDto> findById(Long id) {
-        List<NotificationDto> notificationDtoList = new ArrayList<>();
+    public NotificationDto findById(Long id) {
         try {
             Notification notification = notificationService.getById(id);
             logger.info("Notification: {}" + notification);
             if (notification != null){
-                notificationDtoList.add(modelMapper.map(notification, NotificationDto.class));
-                return notificationDtoList;
+                return modelMapper.map(notification, NotificationDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not Found", "Not Found notification with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());

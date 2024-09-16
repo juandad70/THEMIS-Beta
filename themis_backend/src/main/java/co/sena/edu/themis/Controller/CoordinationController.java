@@ -5,6 +5,7 @@ import co.sena.edu.themis.Dto.CoordinationDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
 import org.apache.coyote.Response;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,12 +38,8 @@ public class CoordinationController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getCoordinationById(@PathVariable Long id) {
         try {
-            List<CoordinationDto> coordinationDtos = coordinationBusiness.findById(id);
-            if (coordinationDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Coordination not found", HttpStatus.NOT_FOUND, "CoordinationNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Coordination retrieved successfully", convertCoordinationDtoToMap(coordinationDtos.get(0)), HttpStatus.OK));
+            CoordinationDto coordinationDtos = coordinationBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Coordination retrieved successfully", convertCoordinationDtoToMap(coordinationDtos), HttpStatus.OK));
         } catch (CustomException customE){
             return handleCustomException(customE);
         }
@@ -113,8 +110,13 @@ public class CoordinationController {
     }
 
     private CoordinationDto convertMapToCoordinationDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         CoordinationDto coordinationDto = new CoordinationDto();
-        coordinationDto.setName((String) map.get("name"));
+        coordinationDto.setId(dataObj.getLong("id"));
+        coordinationDto.setName(dataObj.getString("name"));
+
+
         return coordinationDto;
     }
 

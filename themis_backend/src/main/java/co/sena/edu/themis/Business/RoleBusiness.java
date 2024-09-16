@@ -43,16 +43,14 @@ public class RoleBusiness {
         }
     }
 
-    public List<RoleDto> findById(Long id) {
-        List<RoleDto> roleDtoList = new ArrayList<>();
+    public RoleDto findById(Long id) {
         try {
             Role role = roleService.getById(id);
             logger.info("Role: {}" + role);
             if (role != null) {
-                roleDtoList.add(modelMapper.map(role, RoleDto.class));
-                return roleDtoList;
+                return modelMapper.map(role, RoleDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not Found", "Not found role with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());

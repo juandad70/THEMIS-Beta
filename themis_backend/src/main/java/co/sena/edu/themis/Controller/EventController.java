@@ -4,6 +4,7 @@ import co.sena.edu.themis.Business.EventBusiness;
 import co.sena.edu.themis.Dto.EventDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,12 +37,8 @@ public class EventController {
     @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getEventById(@PathVariable Long id) {
         try {
-            List<EventDto> eventDtos = eventBusiness.findById(id);
-            if (eventDtos.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseHttpApi.responseHttpError("Event not found", HttpStatus.NOT_FOUND, "EventNotFound"));
-            }
-            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Event retrived successfully", convertEventDtoToMap(eventDtos.get(0)), HttpStatus.OK));
+            EventDto eventDtos = eventBusiness.findById(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Event retrived successfully", convertEventDtoToMap(eventDtos), HttpStatus.OK));
         } catch (CustomException customE) {
             return handleCustomException(customE);
         }
@@ -99,7 +96,7 @@ public class EventController {
     private Map<String, Object> convertEventDtoToMap(EventDto eventDto) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", eventDto.getId());
-        map.put("event_file", eventDto.getEvent_file());
+        map.put("eventFile", eventDto.getEventFile());
 
         //Mapear llave foranea de fk_id_proceeding
         if (eventDto.getFk_id_proceeding() != null) {
@@ -119,8 +116,11 @@ public class EventController {
     }
 
     private EventDto convertMapToEventDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         EventDto eventDto = new EventDto();
-        eventDto.setEvent_file((String) map.get("event_file"));
+        eventDto.setId(dataObj.getLong("id"));
+        eventDto.setEventFile(dataObj.getString("eventFile"));
         return eventDto;
     }
 

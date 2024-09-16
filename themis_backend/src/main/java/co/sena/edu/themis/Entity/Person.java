@@ -1,10 +1,12 @@
 package co.sena.edu.themis.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
@@ -42,6 +44,8 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "fk_id_person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Committee> committeeList;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "fk_id_person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ToString.Exclude
     private List<Novelty> noveltyList;
 }

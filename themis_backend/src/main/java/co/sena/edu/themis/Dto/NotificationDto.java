@@ -11,9 +11,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class NotificationDto {
     private Long id;
-    private String notifi_message;
-    private String notifi_status;
-    private Date date_attention;
-    private Date registration_date;
+    private String notiMessage;
+    private String notiStatus;
+    private Date dateAttention;
+    private Date registrationDate;
     private NoveltyDto fk_id_novelty;
 }

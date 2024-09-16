@@ -21,8 +21,8 @@ public class  Proceeding implements Serializable {
     private Long id;
     @Column(name = "name", nullable = false, length = 45)
     private String name;
-    @Column(name = "proceeding_file", nullable = false)
-    private String proceeding_file;
+    @Column(name = "proceedingFile", nullable = false)
+    private String proceedingFile;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_nov_type", referencedColumnName = "id")

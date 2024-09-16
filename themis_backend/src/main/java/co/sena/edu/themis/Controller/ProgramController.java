@@ -4,6 +4,7 @@ import co.sena.edu.themis.Business.ProgramBusiness;
 import co.sena.edu.themis.Dto.ProgramDto;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
 import co.sena.edu.themis.Util.Exception.CustomException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,10 +110,13 @@ public class ProgramController {
     }
 
     private ProgramDto convertMapToProgramDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         ProgramDto programDto = new ProgramDto();
-        programDto.setProgramName((String) map.get("programName"));
-        programDto.setDescription((String) map.get("description"));
-        programDto.setStatus((String) map.get("status"));
+        programDto.setId(dataObj.getLong("id"));
+        programDto.setProgramName(dataObj.getString("programName"));
+        programDto.setDescription(dataObj.getString("description"));
+        programDto.setStatus(dataObj.getString("status"));
         return programDto;
     }
 

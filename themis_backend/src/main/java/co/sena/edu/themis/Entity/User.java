@@ -25,8 +25,8 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "type_document")
-    private String type_document;
+    @Column(name = "typeDocument")
+    private String typeDocument;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(

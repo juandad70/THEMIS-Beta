@@ -41,16 +41,14 @@ public class ProceedingBusiness {
         }
     }
 
-    public List<ProceedingDto> findById(Long id) {
-        List<ProceedingDto> proceedingDtoList = new ArrayList<>();
+    public ProceedingDto findById(Long id) {
         try {
             Proceeding proceeding = proceedingService.getById(id);
             logger.info("Proceeding: {}" + proceeding);
             if (proceeding != null) {
-                proceedingDtoList.add(modelMapper.map(proceeding, ProceedingDto.class));
-                return proceedingDtoList;
+                return modelMapper.map(proceeding, ProceedingDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not Found", "Not found proceeding with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());

@@ -42,16 +42,14 @@ public class CommitteeBusiness {
         }
     }
 
-    public List<CommitteeDto> findById(Long id){
-        List<CommitteeDto> committeeDtoList = new ArrayList<>();
+    public CommitteeDto findById(Long id){
         try {
             Committee committee = committeeService.getById(id);
             logger.info("Committee: {}" + committee);
             if (committee != null) {
-                committeeDtoList.add(modelMapper.map(committee, CommitteeDto.class));
-                return committeeDtoList;
+                return modelMapper.map(committee, CommitteeDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not found", "Not Found committee with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());

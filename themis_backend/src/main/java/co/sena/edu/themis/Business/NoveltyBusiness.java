@@ -2,7 +2,9 @@ package co.sena.edu.themis.Business;
 
 
 import co.sena.edu.themis.Dto.NoveltyDto;
+import co.sena.edu.themis.Dto.PersonDto;
 import co.sena.edu.themis.Entity.Novelty;
+import co.sena.edu.themis.Entity.Person;
 import co.sena.edu.themis.Service.NoveltyService;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import jakarta.persistence.EntityNotFoundException;
@@ -45,16 +47,14 @@ public class NoveltyBusiness {
         }
     }
 
-    public List<NoveltyDto> findById(Long id) {
-        List<NoveltyDto> noveltyDtoList = new ArrayList<>();
+    public NoveltyDto findById(Long id) {
         try {
             Novelty novelty = noveltyService.getById(id);
             logger.info("Novelty: {}" + novelty);
             if (novelty != null) {
-                noveltyDtoList.add(modelMapper.map(novelty, NoveltyDto.class));
-                return noveltyDtoList;
+                return modelMapper.map(novelty, NoveltyDto.class);
             } else {
-                return new ArrayList<>();
+                throw new CustomException("Not found", "Not found novelty with that id", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException entNotFound) {
             logger.info(entNotFound.getMessage());
