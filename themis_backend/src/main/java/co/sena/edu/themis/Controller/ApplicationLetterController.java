@@ -4,11 +4,14 @@ import co.sena.edu.themis.Business.ApplicationLetterBusiness;
 import co.sena.edu.themis.Dto.ApplicationLetterDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -137,12 +140,27 @@ public class ApplicationLetterController {
     }
 
     private ApplicationLetterDto convertMapToApplicationLetterDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataobj = jsonObject.getJSONObject("data");
         ApplicationLetterDto applicationLetterDto = new ApplicationLetterDto();
-        applicationLetterDto.setApplica_date((Date) map.get("applica_date"));
-        applicationLetterDto.setFundament((String) map.get("fundament"));
-        applicationLetterDto.setSignature((String) map.get("signature"));
+
+        try {
+            //Primero se obtiene la fecha como un String
+            String applicaDateStr = dataobj.getString("applica_date");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            //Se cambia el String por Date
+            Date applicaDate = dateFormat.parse(applicaDateStr);
+            applicationLetterDto.setApplica_date(applicaDate); //Se almacena en el DTO
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        applicationLetterDto.setFundament(dataobj.getString("fundament"));
+        applicationLetterDto.setSignature(dataobj.getString("signature"));
+
         return applicationLetterDto;
     }
+
 
     private ResponseEntity<Map<String, Object>> handleCustomException(CustomException e) {
         return ResponseEntity.status(e.getHttpStatus())

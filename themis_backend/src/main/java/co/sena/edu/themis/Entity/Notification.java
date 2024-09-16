@@ -31,6 +31,8 @@ public class Notification implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date registration_date;
 
-    @OneToMany(mappedBy = "fk_id_notification", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Novelty> noveltyList;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_id_novelty", referencedColumnName = "id")
+    private Novelty fk_id_novelty;
 }

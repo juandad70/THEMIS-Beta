@@ -4,6 +4,7 @@ import co.sena.edu.themis.Business.PersonBusiness;
 import co.sena.edu.themis.Dto.PersonDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +46,9 @@ public class PersonController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> createPerson(@RequestBody Map<String, Object> json) {
+    public ResponseEntity<Map<String, Object>> createPerson(@RequestBody Map<String, Object> map) {
         try {
-            PersonDto personDto = convertMapToPersonDto(json);
+            PersonDto personDto = convertMapToPersonDto(map);
             boolean personCreated = personBusiness.createPerson(personDto);
             if (personCreated) {
                 return ResponseEntity.status(HttpStatus.CREATED)
@@ -107,12 +108,15 @@ public class PersonController {
     }
 
     private PersonDto convertMapToPersonDto(Map<String, Object> map) {
+        JSONObject jsonObject = new JSONObject(map);
+        JSONObject dataObj = jsonObject.getJSONObject("data");
         PersonDto personDto = new PersonDto();
-        personDto.setName((String) map.get("name"));
-        personDto.setLastname((String) map.get("lastname"));
-        personDto.setEmail((String) map.get("email"));
-        personDto.setPhone((String) map.get("phone"));
-        personDto.setStatus((String) map.get("status"));
+        personDto.setName(dataObj.getString("name"));
+        personDto.setLastname(dataObj.getString("lastname"));
+        personDto.setEmail(dataObj.getString("email"));
+        personDto.setPhone(dataObj.getString("phone"));
+        personDto.setStatus(dataObj.getString("status"));
+
         return personDto;
     }
 

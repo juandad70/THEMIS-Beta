@@ -1,6 +1,7 @@
 package co.sena.edu.themis.Business;
 
 import co.sena.edu.themis.Dto.CoordinationDto;
+import co.sena.edu.themis.Dto.RoleDto;
 import co.sena.edu.themis.Dto.UserDto;
 import co.sena.edu.themis.Entity.Coordination;
 import co.sena.edu.themis.Entity.User;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserBusiness {
@@ -35,7 +37,19 @@ public class UserBusiness {
             if (users.isEmpty()) {
                 logger.info("Users not found!");
             }
-            Page<UserDto> userDtoPage = users.map(Users -> modelMapper.map(Users, UserDto.class));
+
+            Page<UserDto> userDtoPage = users.map(user -> {
+                UserDto dto = modelMapper.map(user, UserDto.class);
+                // Convertir la lista de roles a una lista de RoleDto
+                if (user.getRoleList() != null) {
+                    List<RoleDto> roleDtos = user.getRoleList().stream()
+                            .map(role -> modelMapper.map(role, RoleDto.class))
+                            .collect(Collectors.toList());
+                    dto.setFk_id_role(roleDtos);
+                }
+                return dto;
+            });
+
             return userDtoPage;
         } catch (Exception e) {
             logger.error(e.getMessage());

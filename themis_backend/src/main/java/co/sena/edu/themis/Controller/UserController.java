@@ -2,6 +2,7 @@ package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.UserBusiness;
 import co.sena.edu.themis.Dto.ProgramDto;
+import co.sena.edu.themis.Dto.RoleDto;
 import co.sena.edu.themis.Dto.UserDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
@@ -101,11 +103,24 @@ public class UserController {
         Map<String, Object> map = new HashMap<>();
         if (userDto.getDocument() != null) {
             map.put("document", userDto.getDocument());
-        } else {
-            map.put("document", ""); // O un valor por defecto adecuado
         }
         map.put("password", userDto.getPassword());
         map.put("type_document", userDto.getType_document());
+        // Agregar la lista de roles
+        if (userDto.getFk_id_role() != null) {
+            List<Map<String, Object>> rolesMap = userDto.getFk_id_role().stream()
+                    .map(this::convertRoleDtoToMap)
+                    .collect(Collectors.toList());
+            map.put("roles", rolesMap);
+        }
+        return map;
+    }
+
+
+    private Map<String, Object> convertRoleDtoToMap(RoleDto roleDto) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", roleDto.getId());
+        map.put("name", roleDto.getName());
         return map;
     }
 
