@@ -1,41 +1,36 @@
 package co.sena.edu.themis.Controller;
 
-import co.sena.edu.themis.Business.EmailBusiness;
+import co.sena.edu.themis.Request.EmailRequest;
+import co.sena.edu.themis.Service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @RestController
-@RequestMapping("/api/email")
+@RequestMapping("/api")
 public class EmailController {
 
     @Autowired
-    private EmailBusiness emailBusiness;
+    private EmailService emailService;
 
-    // Endpoint para enviar un correo electrónico simple
-    @PostMapping("/send")
-    public ResponseEntity<String> sendSimpleEmail(
-            @RequestParam String to,
-            @RequestParam String subject,
-            @RequestParam String text) {
+    @PostMapping("/send-notification")
+    public String sendNotification(@RequestBody EmailRequest emailRequest) {
         try {
-            emailBusiness.sendSimpleEmail(to, subject, text);
-            return ResponseEntity.ok("Correo electrónico enviado correctamente");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al enviar el correo: " + e.getMessage());
-        }
-    }
+            // Obtener la fecha actual en formato local (DD/MM/YYYY)
+            String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
+            // Reemplazar {date} en htmlContent con la fecha actual
+            String htmlContent = emailRequest.getHtmlContent().replace("{date}", currentDate);
 
-    // Endpoint para enviar el código de autenticación 2FA
-    @PostMapping("/send-2fa")
-    public ResponseEntity<String> send2FACode(@RequestParam String to, @RequestParam String code) {
-        try {
-            emailBusiness.send2FACode(to, code);
-            return ResponseEntity.ok("Código 2FA enviado correctamente");
+            // Enviar el correo electrónico con el contenido HTML actualizado
+            emailService.sendHtmlEmail(emailRequest.getEmail(), emailRequest.getSubject(), htmlContent);
+
+            return "Correo enviado con éxito";
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al enviar el código 2FA: " + e.getMessage());
+            e.printStackTrace();
+            return "Error al enviar el correo";
         }
     }
 }
