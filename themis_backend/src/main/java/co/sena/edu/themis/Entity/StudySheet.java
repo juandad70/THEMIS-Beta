@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,6 +21,8 @@ public class StudySheet implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @Column(name = "numberSheet")
+    private Long numberSheet;
     @Column(name = "startDate", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date startDate;
@@ -29,12 +32,15 @@ public class StudySheet implements Serializable {
     @Column(name = "numberStudents", nullable = false)
     private int numberStudents;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_person", referencedColumnName = "id")
+    @ToString.Exclude
     private Person fk_id_person;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_program", referencedColumnName = "id")
+    @ToString.Exclude
     private Program fk_id_program;
 
     @OneToMany(mappedBy = "fk_id_study_sheet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -18,10 +18,10 @@ public class Program implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "programName", nullable = false, length = 45)
+    @Column(name = "programName", nullable = false, length = 100)
     private String programName;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 255)
     private String description;
 
     @Column(name = "status", nullable = false, length = 55)

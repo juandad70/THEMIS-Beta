@@ -4,7 +4,6 @@ import co.sena.edu.themis.Business.CoordinationBusiness;
 import co.sena.edu.themis.Dto.CoordinationDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
-import org.apache.coyote.Response;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/coordination")
+@RequestMapping("/api/coordinations")
 public class CoordinationController {
 
     @Autowired
@@ -113,7 +112,6 @@ public class CoordinationController {
         JSONObject jsonObject = new JSONObject(map);
         JSONObject dataObj = jsonObject.getJSONObject("data");
         CoordinationDto coordinationDto = new CoordinationDto();
-        coordinationDto.setId(dataObj.getLong("id"));
         coordinationDto.setName(dataObj.getString("name"));
 
 

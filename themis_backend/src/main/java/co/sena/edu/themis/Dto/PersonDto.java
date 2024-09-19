@@ -14,4 +14,5 @@ public class PersonDto {
     private String email;
     private String phone;
     private String status;
+    private UserDto fk_id_user;
 }

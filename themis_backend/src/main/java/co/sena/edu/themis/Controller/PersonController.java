@@ -2,6 +2,7 @@ package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.PersonBusiness;
 import co.sena.edu.themis.Dto.PersonDto;
+import co.sena.edu.themis.Dto.UserDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
 import org.json.JSONObject;
@@ -104,6 +105,12 @@ public class PersonController {
         map.put("email", personDto.getEmail());
         map.put("phone", personDto.getPhone());
         map.put("status", personDto.getStatus());
+
+        if (personDto.getFk_id_user() != null) {
+            map.put("fk_id_user", personDto.getFk_id_user());
+        } else {
+            map.put("fk_id_user", null);
+        }
         return map;
     }
 
@@ -111,12 +118,18 @@ public class PersonController {
         JSONObject jsonObject = new JSONObject(map);
         JSONObject dataObj = jsonObject.getJSONObject("data");
         PersonDto personDto = new PersonDto();
-        personDto.setId(dataObj.getLong("id"));
         personDto.setName(dataObj.getString("name"));
         personDto.setLastname(dataObj.getString("lastname"));
         personDto.setEmail(dataObj.getString("email"));
         personDto.setPhone(dataObj.getString("phone"));
         personDto.setStatus(dataObj.getString("status"));
+
+        if (dataObj.has("fk_id_user")) {
+            JSONObject userObj = dataObj.getJSONObject("fk_id_user");
+            UserDto userDto = new UserDto();
+            userDto.setId(userObj.getLong("id"));
+            personDto.setFk_id_user(userDto);
+        }
 
         return personDto;
     }

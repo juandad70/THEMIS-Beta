@@ -122,7 +122,6 @@ public class CommitteeController {
         JSONObject jsonObject = new JSONObject(map);
         JSONObject dataObject = jsonObject.getJSONObject("data");
         CommitteeDto committeeDto = new CommitteeDto();
-        committeeDto.setId(dataObject.getLong("id"));
 
         String committeeDateStr = dataObject.getString("committeeDate");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

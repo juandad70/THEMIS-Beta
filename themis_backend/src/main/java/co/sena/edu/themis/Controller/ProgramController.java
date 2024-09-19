@@ -113,7 +113,6 @@ public class ProgramController {
         JSONObject jsonObject = new JSONObject(map);
         JSONObject dataObj = jsonObject.getJSONObject("data");
         ProgramDto programDto = new ProgramDto();
-        programDto.setId(dataObj.getLong("id"));
         programDto.setProgramName(dataObj.getString("programName"));
         programDto.setDescription(dataObj.getString("description"));
         programDto.setStatus(dataObj.getString("status"));

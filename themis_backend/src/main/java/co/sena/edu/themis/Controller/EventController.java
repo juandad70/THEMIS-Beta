@@ -119,7 +119,6 @@ public class EventController {
         JSONObject jsonObject = new JSONObject(map);
         JSONObject dataObj = jsonObject.getJSONObject("data");
         EventDto eventDto = new EventDto();
-        eventDto.setId(dataObj.getLong("id"));
         eventDto.setEventFile(dataObj.getString("eventFile"));
         return eventDto;
     }

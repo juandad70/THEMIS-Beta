@@ -1,6 +1,8 @@
 package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.StudySheetBusiness;
+import co.sena.edu.themis.Dto.PersonDto;
+import co.sena.edu.themis.Dto.ProgramDto;
 import co.sena.edu.themis.Dto.StudySheetDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
@@ -99,6 +101,7 @@ public class StudySheetController {
     private Map<String, Object> convertStudySheetDtoToMap(StudySheetDto studySheetDto){
         Map<String, Object> map = new HashMap<>();
         map.put("id", studySheetDto.getId());
+        map.put("numberSheet", studySheetDto.getNumberSheet());
         map.put("startDate", studySheetDto.getStartDate());
         map.put("endDate", studySheetDto.getEndDate());
         map.put("numberStudents", studySheetDto.getNumberStudents());
@@ -121,7 +124,7 @@ public class StudySheetController {
         JSONObject jsonObject = new JSONObject(map);
         JSONObject dataObj = jsonObject.getJSONObject("data");
         StudySheetDto studySheetDto = new StudySheetDto();
-        studySheetDto.setId(dataObj.getLong("id"));
+        studySheetDto.setNumberSheet(dataObj.getLong("numberSheet"));
         try {
             String studySheetStr = dataObj.getString("startDate");
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -138,6 +141,20 @@ public class StudySheetController {
             studySheetDto.setEndDate(endDate);
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        if (dataObj.has("fk_id_person")) {
+            JSONObject personObj = dataObj.getJSONObject("fk_id_person");
+            PersonDto personDto = new PersonDto();
+            personDto.setId(personObj.getLong("id"));
+            studySheetDto.setFk_id_person(personDto);
+        }
+
+        if (dataObj.has("fk_id_program")){
+            JSONObject programObj = dataObj.getJSONObject("fk_id_program");
+            ProgramDto programDto = new ProgramDto();
+            programDto.setId(programObj.getLong("id"));
+            studySheetDto.setFk_id_program(programDto);
         }
 
         studySheetDto.setNumberStudents(dataObj.getInt("numberStudents"));

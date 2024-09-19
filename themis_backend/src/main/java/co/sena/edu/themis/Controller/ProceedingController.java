@@ -111,7 +111,6 @@ public class ProceedingController {
         JSONObject jsonObject = new JSONObject(map);
         JSONObject dataObj = jsonObject.getJSONObject("data");
         ProceedingDto proceedingDto = new ProceedingDto();
-        proceedingDto.setId(dataObj.getLong("id"));
         proceedingDto.setName(dataObj.getString("name"));
         proceedingDto.setProceedingFile(dataObj.getString("proceedingFile"));
         return proceedingDto;
