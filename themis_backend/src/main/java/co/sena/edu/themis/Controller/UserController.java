@@ -98,6 +98,7 @@ public class UserController {
 
     private Map<String, Object> convertUserDtoToMap(UserDto userDto) {
         Map<String, Object> map = new HashMap<>();
+        map.put("id", userDto.getId());
         if (userDto.getDocument() != null) {
             map.put("document", userDto.getDocument());
         }
@@ -129,9 +130,23 @@ public class UserController {
         userDto.setDocument(dataObj.getLong("document"));
         userDto.setPassword(dataObj.getString("password"));
         userDto.setTypeDocument(dataObj.getString("typeDocument"));
+
+        // Convertir la lista de roles si existe el campo fk_id_role
+        if (dataObj.has("fk_id_role")) {
+            List<RoleDto> roles = dataObj.getJSONArray("fk_id_role").toList().stream()
+                    .map(role -> {
+                        Map<String, Object> roleMap = (Map<String, Object>) role;
+                        RoleDto roleDto = new RoleDto();
+                        roleDto.setId(Long.valueOf((Integer) roleMap.get("id")));
+                        roleDto.setName((String) roleMap.get("name"));
+                        return roleDto;
+                    })
+                    .collect(Collectors.toList());
+            userDto.setFk_id_role(roles);
+        }
+
         return userDto;
     }
-
 
     private ResponseEntity<Map<String, Object>> handleCustomException(CustomException e) {
         return ResponseEntity.status(e.getHttpStatus())

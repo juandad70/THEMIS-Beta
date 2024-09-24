@@ -24,10 +24,10 @@ public class NoveltyType implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nameNovelty", nullable = false, length = 55)
+    @Column(name = "nameNovelty", nullable = false, length = 100)
     private String nameNovelty;
 
-    @Column(name = "noveltyState", nullable = false, length = 55)
+    @Column(name = "noveltyState", nullable = false, length = 100)
     private String noveltyState;
 
     @Column(name= "sofiaCertainty")

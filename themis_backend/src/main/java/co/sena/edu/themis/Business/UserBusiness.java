@@ -4,8 +4,10 @@ import co.sena.edu.themis.Dto.CoordinationDto;
 import co.sena.edu.themis.Dto.RoleDto;
 import co.sena.edu.themis.Dto.UserDto;
 import co.sena.edu.themis.Entity.Coordination;
+import co.sena.edu.themis.Entity.Role;
 import co.sena.edu.themis.Entity.User;
 import co.sena.edu.themis.Service.CoordinationService;
+import co.sena.edu.themis.Service.RoleService;
 import co.sena.edu.themis.Service.UserService;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,6 +27,9 @@ import java.util.stream.Collectors;
 public class UserBusiness {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
 
     private final ModelMapper modelMapper = new ModelMapper();
     private static final Logger logger = Logger.getLogger(UserBusiness.class);
@@ -78,6 +83,19 @@ public class UserBusiness {
     public boolean createUser(UserDto userDto) {
         try {
             User user = modelMapper.map(userDto, User.class);
+            if (userDto.getFk_id_role() != null && !userDto.getFk_id_role().isEmpty()) {
+                List<Role> roles = userDto.getFk_id_role().stream()
+                        .map(roleDto -> {
+                            // Buscar los roles en la base de datos
+                            Role role = roleService.getById(roleDto.getId());
+                            if (role == null) {
+                                throw new CustomException("Role not found", "Role with id " + roleDto.getId() + " not found", HttpStatus.NOT_FOUND);
+                            }
+                            return role;
+                        })
+                        .collect(Collectors.toList());
+                user.setRoleList(roles);
+            }
             userService.save(user);
             logger.info("User created successfully");
             return true;

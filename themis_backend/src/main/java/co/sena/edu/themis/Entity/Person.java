@@ -36,6 +36,7 @@ public class Person implements Serializable {
 
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_user", referencedColumnName = "id")
+    @ToString.Exclude
     private User fk_id_user;
 
     @OneToMany(mappedBy = "fk_id_person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -31,7 +31,7 @@ public class NoveltyController {
     @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> getAllNovelties() {
         try {
-            List<NoveltyDto> novelties = noveltyBusiness.findAll(0, 10).getContent();
+            List<NoveltyDto> novelties = noveltyBusiness.findAll();
             List<Map<String, Object>> data = novelties.stream()
                     .map(this::convertNoveltyDtoToMap)
                     .toList();

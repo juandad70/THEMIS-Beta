@@ -29,23 +29,28 @@ public class NoveltyBusiness {
     private final ModelMapper modelMapper = new ModelMapper();
     private static final Logger logger = Logger.getLogger(NoveltyBusiness.class);
 
-    public Page<NoveltyDto> findAll(int page, int size) {
+    public List<NoveltyDto> findAll() {
         try {
-            PageRequest pageRequest = PageRequest.of(page, size);
-            Page<Novelty> novelties = noveltyService.findAll(pageRequest);
+            // Obtén todas las novedades sin paginación
+            List<Novelty> novelties = noveltyService.findAll();
 
             if (novelties.isEmpty()) {
                 logger.info("Novelties not found!");
-                return Page.empty();
+                return new ArrayList<>();
             }
 
-            Page<NoveltyDto> noveltyDtoPage = novelties.map(Novelty -> modelMapper.map(Novelty, NoveltyDto.class));
-            return noveltyDtoPage;
+            // Mapea las novedades a DTOs
+            List<NoveltyDto> noveltyDtoList = novelties.stream()
+                    .map(novelty -> modelMapper.map(novelty, NoveltyDto.class))
+                    .collect(Collectors.toList());
+
+            return noveltyDtoList;
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
             throw new CustomException("Error", "Error getting novelties", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     public NoveltyDto findById(Long id) {
         try {
