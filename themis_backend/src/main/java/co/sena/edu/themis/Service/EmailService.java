@@ -22,8 +22,6 @@ public class EmailService {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(htmlContent, true); // true indica que el contenido es HTML
-            FileSystemResource res = new FileSystemResource(new File("/home/fabrica/Documents/themisFront/themis_frontend/public/img/Logo Themis2.png"));
-            helper.addInline("logothemis",res);
             emailSender.send(message);
         } catch (Exception e) {
             e.printStackTrace();

@@ -35,3 +35,10 @@ spring:
       location: /tmp/uploads
       max-file-size: 5MB
       max-request-size: 5MB
+
+cloudflare:
+  r2:
+    accessKey: 0a6d90f2a925d248c7ada00924691ac7
+    secretKey: 9f3054357c3b9cb0ff6e9a0310657c6f1fd409a3c53ec72eaae3ce583fbd80fc
+    bucketName: themis
+    endpoint: https://6e7419b7db7f2d4898da2aee29bce6f1.r2.cloudflarestorage.com
