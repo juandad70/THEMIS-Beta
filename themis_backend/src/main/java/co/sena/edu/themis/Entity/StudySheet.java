@@ -46,4 +46,10 @@ public class StudySheet implements Serializable {
     @OneToMany(mappedBy = "fk_id_study_sheet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ApplicationLetter> applicationLetterList;
 
+    @ManyToOne(cascade = CascadeType.MERGE , fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_id_Journey", referencedColumnName = "id")
+    private Jorney fk_id_jorneys;
+
+
+
 }

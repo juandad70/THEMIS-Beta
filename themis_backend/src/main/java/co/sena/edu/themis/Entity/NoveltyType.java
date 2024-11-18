@@ -30,8 +30,7 @@ public class NoveltyType implements Serializable {
     @Column(name = "noveltyState", nullable = false, length = 100)
     private String noveltyState;
 
-    @Column(name= "sofiaCertainty")
-    private String sofiaCertainty;
+
 
     @Column(name="description", nullable = false)
     private String description;
@@ -43,4 +42,6 @@ public class NoveltyType implements Serializable {
 
     @OneToMany(mappedBy = "fk_id_nov_type", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ApplicationLetter> applicationLetterList;
+    @ManyToMany(mappedBy = "noveltyTypeList", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Role> roleList;
 }
