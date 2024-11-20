@@ -64,7 +64,7 @@ public class ApplicationLetterController {
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Map<String, Object>> updateApplicationLetter(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) {
         try {
             ApplicationLetterDto applicationLetterDto = convertMapToApplicationLetterDto(requestBody);

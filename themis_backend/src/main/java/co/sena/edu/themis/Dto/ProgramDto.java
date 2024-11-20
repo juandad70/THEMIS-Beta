@@ -8,5 +8,5 @@ public class ProgramDto {
     private String programName;
     private String description;
     private String status;
-    private Long fk_id_coordination;
+    private CoordinationDto fk_id_coordination;
 }

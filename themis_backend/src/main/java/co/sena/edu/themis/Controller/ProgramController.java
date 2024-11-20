@@ -1,6 +1,7 @@
 package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.ProgramBusiness;
+import co.sena.edu.themis.Dto.CoordinationDto;
 import co.sena.edu.themis.Dto.ProgramDto;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
 import co.sena.edu.themis.Util.Exception.CustomException;
@@ -34,7 +35,7 @@ public class ProgramController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/all/{id}")
     public ResponseEntity<Map<String, Object>> getProgramById(@PathVariable Long id) {
         try {
             ProgramDto programDto = programBusiness.findById(id);
@@ -43,7 +44,6 @@ public class ProgramController {
             return handleCustomException(e);
         }
     }
-
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createProgram(@RequestBody Map<String, Object> requestBody) {
@@ -116,6 +116,12 @@ public class ProgramController {
         programDto.setProgramName(dataObj.getString("programName"));
         programDto.setDescription(dataObj.getString("description"));
         programDto.setStatus(dataObj.getString("status"));
+        if (dataObj.has("fk_id_coordination")){
+            JSONObject coordinationObj = dataObj.getJSONObject("fk_id_coordination");
+            CoordinationDto coordinationDto = new CoordinationDto();
+            coordinationDto.setId(dataObj.getLong("id"));
+            programDto.setFk_id_coordination(coordinationDto);
+        }
         return programDto;
     }
 

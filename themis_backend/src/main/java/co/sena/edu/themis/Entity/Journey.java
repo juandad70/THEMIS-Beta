@@ -6,15 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+import java.util.List;
 
 
 @Entity
-@Table(name="jorneys")
+@Table(name="journeys")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Jorney {
+public class Journey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -22,4 +22,6 @@ public class Jorney {
     @Column(name = "name" )
     private String name;
 
+    @OneToMany(mappedBy = "fk_id_journey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<StudySheet> studySheetList;
 }

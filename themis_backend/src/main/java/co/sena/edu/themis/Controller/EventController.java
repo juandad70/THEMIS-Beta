@@ -2,6 +2,9 @@ package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.EventBusiness;
 import co.sena.edu.themis.Dto.EventDto;
+import co.sena.edu.themis.Dto.PersonDto;
+import co.sena.edu.themis.Dto.ProceedingDto;
+import co.sena.edu.themis.Entity.Proceeding;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
 import org.json.JSONObject;
@@ -120,6 +123,18 @@ public class EventController {
         JSONObject dataObj = jsonObject.getJSONObject("data");
         EventDto eventDto = new EventDto();
         eventDto.setEventFile(dataObj.getString("eventFile"));
+        if (dataObj.has("fk_id_proceeding")) {
+            JSONObject proceedingObj = dataObj.getJSONObject("fk_id_proceeding");
+            ProceedingDto proceedingDto = new ProceedingDto();
+            proceedingDto.setId(proceedingObj.getLong("id"));
+            eventDto.setFk_id_proceeding(proceedingDto);
+        }
+        if (dataObj.has("fk_id_person")){
+            JSONObject personObj = dataObj.getJSONObject("fk_id_person");
+            PersonDto personDto = new PersonDto();
+            personDto.setId(personObj.getLong("id"));
+            eventDto.setFk_id_person(personDto);
+        }
         return eventDto;
     }
 

@@ -12,7 +12,7 @@ import java.util.Date;
 public class NoveltyTypeDto {
     private Long id;
     private String nameNovelty;
-    private String noveltyState;
-    private String sofiaCertainty;
+    private boolean noveltyState;
     private String description;
+    private String procedureDescription;
 }

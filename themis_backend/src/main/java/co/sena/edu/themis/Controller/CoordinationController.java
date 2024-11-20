@@ -1,6 +1,7 @@
 package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.CoordinationBusiness;
+import co.sena.edu.themis.Dto.CommitteeDto;
 import co.sena.edu.themis.Dto.CoordinationDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
@@ -61,7 +62,7 @@ public class CoordinationController {
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Map<String, Object>> updateCoordination(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) {
         try {
             CoordinationDto coordinationDto = convertMapToCoordinationDto(requestBody);
@@ -93,7 +94,6 @@ public class CoordinationController {
             return handleCustomException(customE);
         }
     }
-    
 
 
     private Map<String, Object> convertCoordinationDtoToMap(CoordinationDto coordinationDto) {
@@ -113,8 +113,12 @@ public class CoordinationController {
         JSONObject dataObj = jsonObject.getJSONObject("data");
         CoordinationDto coordinationDto = new CoordinationDto();
         coordinationDto.setName(dataObj.getString("name"));
-
-
+        if (dataObj.has("fk_id_committee")) {
+            JSONObject committeeObj = dataObj.getJSONObject("fk_id_committee");
+            CommitteeDto committeeDto = new CommitteeDto();
+            committeeDto.setId(committeeObj.getLong("id"));
+            coordinationDto.setFk_id_committee(committeeDto);
+        }
         return coordinationDto;
     }
 

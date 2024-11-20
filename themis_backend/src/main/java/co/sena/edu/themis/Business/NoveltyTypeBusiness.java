@@ -59,7 +59,7 @@ public class NoveltyTypeBusiness {
             throw new CustomException("Not Found", "Not found novelty type with that id", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            throw new CustomException("Error", "Error creating novelty type", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("Error", "Error finding novelty type", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

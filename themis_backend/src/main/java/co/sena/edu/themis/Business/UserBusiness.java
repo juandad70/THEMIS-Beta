@@ -50,7 +50,7 @@ public class UserBusiness {
                     List<RoleDto> roleDtos = user.getRoleList().stream()
                             .map(role -> modelMapper.map(role, RoleDto.class))
                             .collect(Collectors.toList());
-                    dto.setFk_id_role(roleDtos);
+                    dto.setRoleList(roleDtos);
                 }
                 return dto;
             });
@@ -83,8 +83,8 @@ public class UserBusiness {
     public boolean createUser(UserDto userDto) {
         try {
             User user = modelMapper.map(userDto, User.class);
-            if (userDto.getFk_id_role() != null && !userDto.getFk_id_role().isEmpty()) {
-                List<Role> roles = userDto.getFk_id_role().stream()
+            if (userDto.getRoleList() != null && !userDto.getRoleList().isEmpty()) {
+                List<Role> roles = userDto.getRoleList().stream()
                         .map(roleDto -> {
                             // Buscar los roles en la base de datos
                             Role role = roleService.getById(roleDto.getId());

@@ -67,14 +67,14 @@ public class NoveltyTypeController {
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Map<String, Object>> updateNoveltyType(@PathVariable Long id, @RequestBody Map<String, Object> json) {
         try {
             NoveltyTypeDto noveltyTypeDto = convertMapToNoveltyTypeDto(json);
             noveltyTypeDto.setId(id);
-            boolean noveltyTypeCreated = noveltyTypeBusiness.updateNoveltyType(noveltyTypeDto);
-            if (noveltyTypeCreated) {
-                return ResponseEntity.ok(ResponseHttpApi.responseHttpPut("Novelty type created successfully", HttpStatus.OK));
+            boolean noveltyTypeUpdated = noveltyTypeBusiness.updateNoveltyType(noveltyTypeDto);
+            if (noveltyTypeUpdated) {
+                return ResponseEntity.ok(ResponseHttpApi.responseHttpPut("Novelty type update successfully", HttpStatus.OK));
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(ResponseHttpApi.responseHttpError("Novelty type update failed", HttpStatus.INTERNAL_SERVER_ERROR, "UpdateError"));
@@ -104,9 +104,9 @@ public class NoveltyTypeController {
         Map<String, Object> map = new HashMap<>();
         map.put("id", noveltyTypeDto.getId());
         map.put("nameNovelty", noveltyTypeDto.getNameNovelty());
-        map.put("noveltyState", noveltyTypeDto.getNoveltyState());
-        map.put("sofiaCertainty", noveltyTypeDto.getSofiaCertainty());
+        map.put("noveltyState", noveltyTypeDto.isNoveltyState());
         map.put("description", noveltyTypeDto.getDescription());
+        map.put("procedureDescription", noveltyTypeDto.getProcedureDescription());
         return map;
     }
 
@@ -115,9 +115,9 @@ public class NoveltyTypeController {
         JSONObject dataObj = jsonObject.getJSONObject("data");
         NoveltyTypeDto noveltyTypeDto = new NoveltyTypeDto();
         noveltyTypeDto.setNameNovelty(dataObj.getString("nameNovelty"));
-        noveltyTypeDto.setNoveltyState(dataObj.getString("noveltyState"));
-        noveltyTypeDto.setSofiaCertainty(dataObj.getString("sofiaCertainty"));
+        noveltyTypeDto.setNoveltyState(dataObj.getBoolean("noveltyState"));
         noveltyTypeDto.setDescription(dataObj.getString("description"));
+        noveltyTypeDto.setProcedureDescription(dataObj.getString("procedureDescription"));
         return noveltyTypeDto;
     }
 

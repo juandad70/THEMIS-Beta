@@ -15,5 +15,5 @@ public class UserDto {
     private Long document;
     private String password;
     private String typeDocument;
-    private List<RoleDto> fk_id_role;
+    private List<RoleDto> roleList;
 }
