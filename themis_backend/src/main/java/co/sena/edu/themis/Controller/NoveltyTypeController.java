@@ -84,6 +84,25 @@ public class NoveltyTypeController {
         }
     }
 
+    @PutMapping("/updateState/{id}")
+    public ResponseEntity<Map<String, Object>> updateStateNoveltyType(@PathVariable Long id, @RequestBody Map<String, Object> json) {
+        try {
+            NoveltyTypeDto noveltyTypeDto = convertMapForNoveltyTypeState(json);
+            noveltyTypeDto.setId(id);
+            boolean stateUpdated = noveltyTypeBusiness.updateStateNoveltyType(noveltyTypeDto);
+
+            if (stateUpdated) {
+                return ResponseEntity.ok(ResponseHttpApi.responseHttpPut("Novelty type state updated successfully", HttpStatus.OK));
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ResponseHttpApi.responseHttpError("Novelty type state update failed", HttpStatus.INTERNAL_SERVER_ERROR, "UpdateError"));
+            }
+        } catch (CustomException customE) {
+            return handleCustomException(customE);
+        }
+    }
+
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, Object>> deleteNoveltyTypeById(@PathVariable Long id) {
         try {
@@ -119,6 +138,22 @@ public class NoveltyTypeController {
         noveltyTypeDto.setDescription(dataObj.getString("description"));
         noveltyTypeDto.setProcedureDescription(dataObj.getString("procedureDescription"));
         return noveltyTypeDto;
+    }
+
+    private NoveltyTypeDto convertMapForNoveltyTypeState(Map<String, Object> map) {
+        if (map.containsKey("data")) {
+            Map<String, Object> data = (Map<String, Object>) map.get("data");
+
+            if (data.containsKey("noveltyState")) {
+                NoveltyTypeDto noveltyTypeDto = new NoveltyTypeDto();
+                noveltyTypeDto.setNoveltyState((Boolean) data.get("noveltyState"));
+                return noveltyTypeDto;
+            } else {
+                throw new CustomException("Bad Request", "The 'noveltyState' field is required inside 'data'", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            throw new CustomException("Bad Request", "The 'data' field is required", HttpStatus.BAD_REQUEST);
+        }
     }
 
     private ResponseEntity<Map<String, Object>> handleCustomException(CustomException e) {

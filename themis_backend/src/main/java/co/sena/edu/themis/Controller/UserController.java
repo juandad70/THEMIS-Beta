@@ -134,7 +134,9 @@ public class UserController {
         // Convertir la lista de roles si existe el campo fk_id_role
         if (dataObj.has("fk_id_role")) {
             List<RoleDto> roles = dataObj.getJSONArray("fk_id_role").toList().stream()
+                    .filter(role -> role instanceof Map) // Validar que sean Map
                     .map(role -> {
+                        @SuppressWarnings("unchecked") // Silenciar la advertencia
                         Map<String, Object> roleMap = (Map<String, Object>) role;
                         RoleDto roleDto = new RoleDto();
                         roleDto.setId(Long.valueOf((Integer) roleMap.get("id")));
@@ -147,6 +149,7 @@ public class UserController {
 
         return userDto;
     }
+
 
     private ResponseEntity<Map<String, Object>> handleCustomException(CustomException e) {
         return ResponseEntity.status(e.getHttpStatus())
