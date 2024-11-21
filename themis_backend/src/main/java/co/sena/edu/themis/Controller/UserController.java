@@ -105,8 +105,8 @@ public class UserController {
         map.put("password", userDto.getPassword());
         map.put("typeDocument", userDto.getTypeDocument());
         // Agregar la lista de roles
-        if (userDto.getFk_id_role() != null) {
-            List<Map<String, Object>> rolesMap = userDto.getFk_id_role().stream()
+        if (userDto.getRoleList() != null) {
+            List<Map<String, Object>> rolesMap = userDto.getRoleList().stream()
                     .map(this::convertRoleDtoToMap)
                     .collect(Collectors.toList());
             map.put("roles", rolesMap);
@@ -134,7 +134,9 @@ public class UserController {
         // Convertir la lista de roles si existe el campo fk_id_role
         if (dataObj.has("fk_id_role")) {
             List<RoleDto> roles = dataObj.getJSONArray("fk_id_role").toList().stream()
+                    .filter(role -> role instanceof Map) // Validar que sean Map
                     .map(role -> {
+                        @SuppressWarnings("unchecked") // Silenciar la advertencia
                         Map<String, Object> roleMap = (Map<String, Object>) role;
                         RoleDto roleDto = new RoleDto();
                         roleDto.setId(Long.valueOf((Integer) roleMap.get("id")));
@@ -142,11 +144,12 @@ public class UserController {
                         return roleDto;
                     })
                     .collect(Collectors.toList());
-            userDto.setFk_id_role(roles);
+            userDto.setRoleList(roles);
         }
 
         return userDto;
     }
+
 
     private ResponseEntity<Map<String, Object>> handleCustomException(CustomException e) {
         return ResponseEntity.status(e.getHttpStatus())

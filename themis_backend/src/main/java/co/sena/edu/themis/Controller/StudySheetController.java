@@ -1,6 +1,7 @@
 package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.StudySheetBusiness;
+import co.sena.edu.themis.Dto.JourneyDto;
 import co.sena.edu.themis.Dto.PersonDto;
 import co.sena.edu.themis.Dto.ProgramDto;
 import co.sena.edu.themis.Dto.StudySheetDto;
@@ -117,6 +118,12 @@ public class StudySheetController {
             map.put("fk_id_program", null);
         }
 
+        if (studySheetDto.getFk_id_journey() != null) {
+            map.put("fk_id_journey", studySheetDto.getFk_id_journey());
+        } else {
+            map.put("fk_id_journey", null);
+        }
+
         return map;
     }
 
@@ -157,6 +164,12 @@ public class StudySheetController {
             studySheetDto.setFk_id_program(programDto);
         }
 
+        if (dataObj.has("fk_id_journey")) {
+            JSONObject journeyObj = dataObj.getJSONObject("fk_id_journey");
+            JourneyDto journeyDto = new JourneyDto();
+            journeyDto.setId(journeyObj.getLong("id"));
+            studySheetDto.setFk_id_journey(journeyDto);
+        }
         studySheetDto.setNumberStudents(dataObj.getInt("numberStudents"));
         return studySheetDto;
     }
@@ -165,5 +178,4 @@ public class StudySheetController {
         return ResponseEntity.status(e.getHttpStatus())
                 .body(ResponseHttpApi.responseHttpError(e.getMessage(), e.getHttpStatus(), e.getTitle()));
     }
-
 }

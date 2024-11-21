@@ -17,4 +17,5 @@ public class StudySheetDto {
     private int numberStudents;
     private PersonDto fk_id_person;
     private ProgramDto fk_id_program;
+    private JourneyDto fk_id_journey;
 }

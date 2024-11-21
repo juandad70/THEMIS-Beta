@@ -2,6 +2,7 @@ package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.PersonBusiness;
 import co.sena.edu.themis.Dto.PersonDto;
+import co.sena.edu.themis.Dto.StudySheetDto;
 import co.sena.edu.themis.Dto.UserDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
@@ -45,7 +46,6 @@ public class PersonController {
         }
     }
 
-
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createPerson(@RequestBody Map<String, Object> map) {
         try {
@@ -80,8 +80,7 @@ public class PersonController {
         }
     }
 
-
-    @DeleteMapping("/delete/{}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, Object>> deletePerson(@PathVariable Long id) {
         try {
             boolean personDeleted = personBusiness.deletePersonById(id);
@@ -111,6 +110,12 @@ public class PersonController {
         } else {
             map.put("fk_id_user", null);
         }
+
+        if (personDto.getFk_id_study_sheet() != null) {
+            map.put("fk_id_study_sheet", personDto.getFk_id_study_sheet());
+        } else {
+            map.put("fk_id_study_sheet", null);
+        }
         return map;
     }
 
@@ -130,7 +135,12 @@ public class PersonController {
             userDto.setId(userObj.getLong("id"));
             personDto.setFk_id_user(userDto);
         }
-
+        if (dataObj.has("fk_id_study_sheet")) {
+            JSONObject studySheetObj = dataObj.getJSONObject("fk_id_study_sheet");
+            StudySheetDto studySheetDto = new StudySheetDto();
+            studySheetDto.setId(studySheetObj.getLong("id"));
+            personDto.setFk_id_study_sheet(studySheetDto);
+        }
         return personDto;
     }
 
@@ -138,5 +148,4 @@ public class PersonController {
         return ResponseEntity.status(e.getHttpStatus())
                 .body(ResponseHttpApi.responseHttpError(e.getMessage(), e.getHttpStatus(), e.getTitle()));
     }
-
 }

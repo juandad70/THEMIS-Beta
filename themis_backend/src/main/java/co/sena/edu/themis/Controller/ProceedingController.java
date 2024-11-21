@@ -1,6 +1,7 @@
 package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.ProceedingBusiness;
+import co.sena.edu.themis.Dto.NoveltyTypeDto;
 import co.sena.edu.themis.Dto.ProceedingDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
@@ -61,7 +62,7 @@ public class ProceedingController {
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Map<String, Object>> updateProceeding(@PathVariable Long id, @RequestBody Map<String, Object> json) {
         try {
             ProceedingDto proceedingDto = convertMapToProceedingDto(json);
@@ -113,6 +114,12 @@ public class ProceedingController {
         ProceedingDto proceedingDto = new ProceedingDto();
         proceedingDto.setName(dataObj.getString("name"));
         proceedingDto.setProceedingFile(dataObj.getString("proceedingFile"));
+        if (dataObj.has("fk_id_nov_type")) {
+            JSONObject noveltyTypeObj = dataObj.getJSONObject("fk_id_nov_type");
+            NoveltyTypeDto noveltyTypeDto = new NoveltyTypeDto();
+            noveltyTypeDto.setId(noveltyTypeObj.getLong("id"));
+            proceedingDto.setFk_id_nov_type(noveltyTypeDto);
+        }
         return proceedingDto;
     }
 

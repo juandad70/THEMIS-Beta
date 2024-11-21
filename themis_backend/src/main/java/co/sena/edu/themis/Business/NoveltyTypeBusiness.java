@@ -59,7 +59,7 @@ public class NoveltyTypeBusiness {
             throw new CustomException("Not Found", "Not found novelty type with that id", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            throw new CustomException("Error", "Error creating novelty type", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("Error", "Error finding novelty type", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -93,6 +93,27 @@ public class NoveltyTypeBusiness {
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new CustomException("Error", "Error update novelty type", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public boolean updateStateNoveltyType(NoveltyTypeDto noveltyTypeDto) {
+        try {
+            if (noveltyTypeDto.getId() == null) {
+                logger.info("Can't update state to novelty type because the id is null");
+            }
+
+            NoveltyType existingNoveltyType = noveltyTypeService.getById(noveltyTypeDto.getId());
+            logger.info("Novelty type to update state: " + existingNoveltyType);
+
+            existingNoveltyType.setNoveltyState(noveltyTypeDto.isNoveltyState());
+            noveltyTypeService.save(existingNoveltyType);
+            return true;
+        } catch (EntityNotFoundException entNotFound) {
+            logger.info("The novelty type you are trying to update the state is not registered");
+            throw new CustomException("Not Found", "Can't update the state for novelty type because it isn't registered", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new CustomException("Error", "Error updating the state of the novelty type", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

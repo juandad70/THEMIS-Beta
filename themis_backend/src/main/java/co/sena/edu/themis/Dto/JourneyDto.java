@@ -7,13 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonDto {
+public class JourneyDto {
     private Long id;
     private String name;
-    private String lastname;
-    private String email;
-    private String phone;
-    private String status;
-    private UserDto fk_id_user;
-    private StudySheetDto fk_id_study_sheet;
 }

@@ -46,10 +46,10 @@ public class StudySheet implements Serializable {
     @OneToMany(mappedBy = "fk_id_study_sheet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ApplicationLetter> applicationLetterList;
 
+    @OneToMany(mappedBy = "fk_id_study_sheet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Apprentice> apprenticeList;
+
     @ManyToOne(cascade = CascadeType.MERGE , fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_id_Journey", referencedColumnName = "id")
-    private Jorney fk_id_jorneys;
-
-
-
+    @JoinColumn(name = "fk_id_journey", referencedColumnName = "id")
+    private Journey fk_id_journey;
 }

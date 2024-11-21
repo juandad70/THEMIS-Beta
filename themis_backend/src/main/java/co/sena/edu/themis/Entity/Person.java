@@ -51,5 +51,5 @@ public class Person implements Serializable {
     private List<Novelty> noveltyList;
 
     @OneToOne(mappedBy = "fk_id_person")
-    private StudySheet studySheet;
+    private StudySheet fk_id_study_sheet;
 }

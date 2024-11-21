@@ -69,7 +69,7 @@ public class NoveltyController {
         }
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Map<String, Object>> updateNovelty(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) {
         try {
             NoveltyDto noveltyDto = convertMapToNoveltyDto(requestBody);
