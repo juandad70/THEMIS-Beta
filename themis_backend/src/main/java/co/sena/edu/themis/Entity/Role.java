@@ -1,9 +1,11 @@
 package co.sena.edu.themis.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -21,14 +23,12 @@ public class Role {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "roleList", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToMany(mappedBy = "roleList", fetch = FetchType.LAZY)
     private List<User> userList;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "roles_novelty_types",
-            joinColumns = @JoinColumn(name = "fk_role_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "fk_novelty_type_id", referencedColumnName = "id")
-    )
+    @JsonIgnore
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<NoveltyType> noveltyTypeList;
 }

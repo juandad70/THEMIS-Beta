@@ -5,8 +5,10 @@ package co.sena.edu.themis.Controller;
 import co.sena.edu.themis.Business.NoveltyTypeBusiness;
 
 import co.sena.edu.themis.Dto.NoveltyTypeDto;
+import co.sena.edu.themis.Dto.RoleDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/novelty-types")
@@ -126,6 +125,16 @@ public class NoveltyTypeController {
         map.put("noveltyState", noveltyTypeDto.isNoveltyState());
         map.put("description", noveltyTypeDto.getDescription());
         map.put("procedureDescription", noveltyTypeDto.getProcedureDescription());
+
+        if (noveltyTypeDto.getRoles() != null) {
+            List<Map<String, Object>> roles = noveltyTypeDto.getRoles().stream().map(role -> {
+                Map<String, Object> roleMap = new HashMap<>();
+                roleMap.put("id", role.getId());
+                roleMap.put("name", role.getName());
+                return roleMap;
+            }).toList();
+            map.put("roles", roles);
+        }
         return map;
     }
 
@@ -137,7 +146,36 @@ public class NoveltyTypeController {
         noveltyTypeDto.setNoveltyState(dataObj.getBoolean("noveltyState"));
         noveltyTypeDto.setDescription(dataObj.getString("description"));
         noveltyTypeDto.setProcedureDescription(dataObj.getString("procedureDescription"));
+
+        if (dataObj.has("roles")) {
+            Object rolesObj = dataObj.get("roles");
+
+            if (rolesObj instanceof JSONArray rolesArray) {
+                List<RoleDto> roles = new ArrayList<>();
+                for (int i = 0; i < rolesArray.length(); i++) {
+                    JSONObject roleObj = rolesArray.getJSONObject(i);
+                    roles.add(convertJSONObjectToRoleDto(roleObj));
+                }
+                noveltyTypeDto.setRoles(roles);
+            } else {
+                throw new CustomException("Bad Request", "'roles' must be a list of objects", HttpStatus.BAD_REQUEST);
+            }
+        }
         return noveltyTypeDto;
+    }
+
+    private RoleDto convertJSONObjectToRoleDto(JSONObject roleObj) {
+        RoleDto roleDto = new RoleDto();
+
+        if (roleObj.has("id")) {
+            roleDto.setId(roleObj.getLong("id"));
+        }
+
+        if (roleObj.has("name")) {
+            roleDto.setName(roleObj.getString("name"));
+        }
+
+        return roleDto;
     }
 
     private NoveltyTypeDto convertMapForNoveltyTypeState(Map<String, Object> map) {

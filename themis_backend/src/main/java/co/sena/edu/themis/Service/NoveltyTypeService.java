@@ -22,7 +22,7 @@ public class NoveltyTypeService implements Idao<NoveltyType, Long> {
 
     @Override
     public List<NoveltyType> findAll() {
-        return noveltyTypeRepository.findAll();
+        return noveltyTypeRepository.findAllWithRoles();
     }
 
     @Override

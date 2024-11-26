@@ -5,7 +5,9 @@ package co.sena.edu.themis.Business;
 
 import co.sena.edu.themis.Dto.NoveltyTypeDto;
 import co.sena.edu.themis.Entity.NoveltyType;
+import co.sena.edu.themis.Entity.Role;
 import co.sena.edu.themis.Service.NoveltyTypeService;
+import co.sena.edu.themis.Service.RoleService;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.log4j.Logger;
@@ -25,6 +27,9 @@ public class NoveltyTypeBusiness {
 
     @Autowired
     private NoveltyTypeService noveltyTypeService;
+
+    @Autowired
+    private RoleService roleService;
 
     private final ModelMapper modelMapper = new ModelMapper();
     private static final Logger logger = Logger.getLogger(NoveltyTypeBusiness.class);
@@ -66,9 +71,33 @@ public class NoveltyTypeBusiness {
     public boolean createNoveltyType(NoveltyTypeDto noveltyTypeDto) {
         try {
             NoveltyType noveltyType = modelMapper.map(noveltyTypeDto, NoveltyType.class);
+            List<Role> roles = noveltyTypeDto.getRoles().stream()
+                    .map(roleDto -> {
+                        if (roleDto.getId() == null) {
+                            throw new CustomException(
+                                    "Role ID Missing",
+                                    "Role ID is required for associating a role",
+                                    HttpStatus.BAD_REQUEST
+                            );
+                        }
+                        Role role = roleService.getById(roleDto.getId());
+                        if (role == null) {
+                            throw new CustomException(
+                                    "Role Not Found",
+                                    "Role with ID " + roleDto.getId() + " does not exist",
+                                    HttpStatus.NOT_FOUND
+                            );
+                        }
+                        return role;
+                    })
+                    .collect(Collectors.toList());
+            noveltyType.setRoles(roles);
             noveltyTypeService.save(noveltyType);
-            logger.info("Novelty type created successfully");
+            logger.info("Novelty type created successfully with roles: " + roles);
             return true;
+        } catch (CustomException e) {
+            logger.warn(e.getMessage());
+            throw e;
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new CustomException("Error", "Error creating novelty type", HttpStatus.INTERNAL_SERVER_ERROR);

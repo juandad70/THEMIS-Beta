@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name="novelties_types")
+@Table(name = "novelties_types")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -28,7 +28,7 @@ public class NoveltyType implements Serializable {
     @Column(name = "noveltyState", nullable = false)
     private boolean noveltyState;
 
-    @Column(name="description", nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "procedureDescription", nullable = false, length = 120)
@@ -39,9 +39,16 @@ public class NoveltyType implements Serializable {
     @ToString.Exclude
     private List<Novelty> noveltyList;
 
-    @OneToMany(mappedBy = "fk_id_nov_type", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "fk_id_nov_type", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ApplicationLetter> applicationLetterList;
 
-    @ManyToMany(mappedBy = "noveltyTypeList", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Role> roleList;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "roles_novelty_types",
+            joinColumns = @JoinColumn(name = "fk_id_novelty_type", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "fk_id_role", referencedColumnName = "id")
+    )
+    @ToString.Exclude
+    private List<Role> roles;
 }
