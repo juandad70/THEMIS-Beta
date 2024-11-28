@@ -32,12 +32,6 @@ public class StudySheet implements Serializable {
     @Column(name = "numberStudents", nullable = false)
     private int numberStudents;
 
-
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_id_person", referencedColumnName = "id")
-    @ToString.Exclude
-    private Person fk_id_person;
-
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_program", referencedColumnName = "id")
     @ToString.Exclude

@@ -35,4 +35,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "fk_id_role", referencedColumnName = "id")
     )
     private List<Role> roleList;
+
+    @OneToOne
+    @JoinColumn(name = "fk_id_person", nullable = false)
+    private Person fk_id_person;
 }

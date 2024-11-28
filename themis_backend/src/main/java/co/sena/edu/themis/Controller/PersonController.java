@@ -105,17 +105,6 @@ public class PersonController {
         map.put("phone", personDto.getPhone());
         map.put("status", personDto.getStatus());
 
-        if (personDto.getFk_id_user() != null) {
-            map.put("fk_id_user", personDto.getFk_id_user());
-        } else {
-            map.put("fk_id_user", null);
-        }
-
-        if (personDto.getFk_id_study_sheet() != null) {
-            map.put("fk_id_study_sheet", personDto.getFk_id_study_sheet());
-        } else {
-            map.put("fk_id_study_sheet", null);
-        }
         return map;
     }
 
@@ -129,18 +118,6 @@ public class PersonController {
         personDto.setPhone(dataObj.getString("phone"));
         personDto.setStatus(dataObj.getString("status"));
 
-        if (dataObj.has("fk_id_user")) {
-            JSONObject userObj = dataObj.getJSONObject("fk_id_user");
-            UserDto userDto = new UserDto();
-            userDto.setId(userObj.getLong("id"));
-            personDto.setFk_id_user(userDto);
-        }
-        if (dataObj.has("fk_id_study_sheet")) {
-            JSONObject studySheetObj = dataObj.getJSONObject("fk_id_study_sheet");
-            StudySheetDto studySheetDto = new StudySheetDto();
-            studySheetDto.setId(studySheetObj.getLong("id"));
-            personDto.setFk_id_study_sheet(studySheetDto);
-        }
         return personDto;
     }
 

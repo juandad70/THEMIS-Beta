@@ -43,10 +43,10 @@ public class PersonBusiness {
 
     public PersonDto findById(Long id) {
         try {
-            Person person = personService.getById(id); // Asumiendo que `getById` lanza una excepción si no encuentra la persona
+            Person person = personService.getById(id);
             logger.info("Person: {}" + person);
             if (person != null) {
-                return modelMapper.map(person, PersonDto.class); // Devuelve directamente el DTO
+                return modelMapper.map(person, PersonDto.class);
             } else {
                 throw new CustomException("Not found", "Not found person with that id", HttpStatus.NOT_FOUND);
             }

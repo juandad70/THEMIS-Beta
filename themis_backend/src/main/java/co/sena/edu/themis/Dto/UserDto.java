@@ -16,4 +16,5 @@ public class UserDto {
     private String password;
     private String typeDocument;
     private List<RoleDto> roleList;
+    private PersonDto fk_id_person;
 }

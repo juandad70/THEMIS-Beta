@@ -15,7 +15,6 @@ public class StudySheetDto {
     private Date startDate;
     private Date endDate;
     private int numberStudents;
-    private PersonDto fk_id_person;
     private ProgramDto fk_id_program;
     private JourneyDto fk_id_journey;
 }

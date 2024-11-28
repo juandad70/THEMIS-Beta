@@ -34,11 +34,6 @@ public class Person implements Serializable {
     private String status;
 
 
-    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_id_user", referencedColumnName = "id")
-    @ToString.Exclude
-    private User fk_id_user;
-
     @OneToMany(mappedBy = "fk_id_person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ApplicationLetter> applicationLetterList;
 
@@ -49,7 +44,4 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "fk_id_person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<Novelty> noveltyList;
-
-    @OneToOne(mappedBy = "fk_id_person")
-    private StudySheet fk_id_study_sheet;
 }

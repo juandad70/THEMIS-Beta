@@ -43,18 +43,7 @@ public class UserBusiness {
                 logger.info("Users not found!");
             }
 
-            Page<UserDto> userDtoPage = users.map(user -> {
-                UserDto dto = modelMapper.map(user, UserDto.class);
-                // Convertir la lista de roles a una lista de RoleDto
-                if (user.getRoleList() != null) {
-                    List<RoleDto> roleDtos = user.getRoleList().stream()
-                            .map(role -> modelMapper.map(role, RoleDto.class))
-                            .collect(Collectors.toList());
-                    dto.setRoleList(roleDtos);
-                }
-                return dto;
-            });
-
+            Page<UserDto> userDtoPage = users.map(User -> modelMapper.map(User, UserDto.class));
             return userDtoPage;
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -83,19 +72,27 @@ public class UserBusiness {
     public boolean createUser(UserDto userDto) {
         try {
             User user = modelMapper.map(userDto, User.class);
-            if (userDto.getRoleList() != null && !userDto.getRoleList().isEmpty()) {
-                List<Role> roles = userDto.getRoleList().stream()
-                        .map(roleDto -> {
-                            // Buscar los roles en la base de datos
-                            Role role = roleService.getById(roleDto.getId());
-                            if (role == null) {
-                                throw new CustomException("Role not found", "Role with id " + roleDto.getId() + " not found", HttpStatus.NOT_FOUND);
-                            }
-                            return role;
-                        })
-                        .collect(Collectors.toList());
-                user.setRoleList(roles);
-            }
+            List<Role> roles = userDto.getRoleList().stream()
+                            .map(roleDto -> {
+                                if (roleDto.getId() == null) {
+                                    throw new CustomException(
+                                            "Role id Missing",
+                                            "Role is is required for associating a role",
+                                            HttpStatus.BAD_REQUEST
+                                    );
+                                }
+                                Role role = roleService.getById(roleDto.getId());
+                                if (role == null) {
+                                    throw new CustomException(
+                                            "Role not found",
+                                            "Role with id " + roleDto.getId() + " doesn't exist",
+                                            HttpStatus.NOT_FOUND
+                                    );
+                                }
+                                return role;
+                            })
+                                    .collect(Collectors.toList());
+            user.setRoleList(roles);
             userService.save(user);
             logger.info("User created successfully");
             return true;

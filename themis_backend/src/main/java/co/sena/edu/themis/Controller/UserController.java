@@ -1,17 +1,20 @@
 package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.UserBusiness;
+import co.sena.edu.themis.Dto.PersonDto;
 import co.sena.edu.themis.Dto.ProgramDto;
 import co.sena.edu.themis.Dto.RoleDto;
 import co.sena.edu.themis.Dto.UserDto;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,24 +107,22 @@ public class UserController {
         }
         map.put("password", userDto.getPassword());
         map.put("typeDocument", userDto.getTypeDocument());
-        // Agregar la lista de roles
         if (userDto.getRoleList() != null) {
-            List<Map<String, Object>> rolesMap = userDto.getRoleList().stream()
-                    .map(this::convertRoleDtoToMap)
-                    .collect(Collectors.toList());
-            map.put("roles", rolesMap);
+            List<Map<String, Object>> roles = userDto.getRoleList().stream().map(role -> {
+                Map<String, Object> roleMap = new HashMap<>();
+                roleMap.put("id", role.getId());
+                roleMap.put("name", role.getName());
+                return roleMap;
+            }).toList();
+            map.put("roleList", roles);
+        }
+        if (userDto.getFk_id_person() != null) {
+            map.put("fk_id_person", userDto.getFk_id_person());
+        } else {
+            map.put("fk_id_person", null);
         }
         return map;
     }
-
-
-    private Map<String, Object> convertRoleDtoToMap(RoleDto roleDto) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", roleDto.getId());
-        map.put("name", roleDto.getName());
-        return map;
-    }
-
 
     private UserDto convertMapToUserDto(Map<String, Object> map) {
         JSONObject jsonObject = new JSONObject(map);
@@ -130,26 +131,36 @@ public class UserController {
         userDto.setDocument(dataObj.getLong("document"));
         userDto.setPassword(dataObj.getString("password"));
         userDto.setTypeDocument(dataObj.getString("typeDocument"));
-
-        // Convertir la lista de roles si existe el campo fk_id_role
-        if (dataObj.has("fk_id_role")) {
-            List<RoleDto> roles = dataObj.getJSONArray("fk_id_role").toList().stream()
-                    .filter(role -> role instanceof Map) // Validar que sean Map
-                    .map(role -> {
-                        @SuppressWarnings("unchecked") // Silenciar la advertencia
-                        Map<String, Object> roleMap = (Map<String, Object>) role;
-                        RoleDto roleDto = new RoleDto();
-                        roleDto.setId(Long.valueOf((Integer) roleMap.get("id")));
-                        roleDto.setName((String) roleMap.get("name"));
-                        return roleDto;
-                    })
-                    .collect(Collectors.toList());
-            userDto.setRoleList(roles);
+        if (dataObj.has("roleList")) {
+            Object roleObj = dataObj.get("roleList");
+            if (roleObj instanceof JSONArray rolesArray) {
+                List<RoleDto> roles = new ArrayList<>();
+                for (int i = 0; i < rolesArray.length(); i++) {
+                    JSONObject rolesObj = rolesArray.getJSONObject(i);
+                    roles.add(convertJSONObjectToRoleDto(rolesObj));
+                }
+                userDto.setRoleList(roles);
+            }
         }
-
+        if (dataObj.has("fk_id_person")) {
+            JSONObject personObj = dataObj.getJSONObject("fk_id_person");
+            PersonDto personDto = new PersonDto();
+            personDto.setId(personObj.getLong("id"));
+            userDto.setFk_id_person(personDto);
+        }
         return userDto;
     }
 
+    private RoleDto convertJSONObjectToRoleDto(JSONObject roleObj) {
+        RoleDto roleDto = new RoleDto();
+        if (roleObj.has("id")) {
+            roleDto.setId(roleObj.getLong("id"));
+        }
+        if (roleObj.has("name")) {
+            roleDto.setName(roleObj.getString("name"));
+        }
+        return roleDto;
+    }
 
     private ResponseEntity<Map<String, Object>> handleCustomException(CustomException e) {
         return ResponseEntity.status(e.getHttpStatus())

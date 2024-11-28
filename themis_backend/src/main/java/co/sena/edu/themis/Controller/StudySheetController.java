@@ -106,11 +106,6 @@ public class StudySheetController {
         map.put("startDate", studySheetDto.getStartDate());
         map.put("endDate", studySheetDto.getEndDate());
         map.put("numberStudents", studySheetDto.getNumberStudents());
-        if (studySheetDto.getFk_id_person() != null) {
-            map.put("fk_id_person", studySheetDto.getFk_id_person());
-        } else {
-            map.put("fk_id_person", null);
-        }
 
         if (studySheetDto.getFk_id_program() != null) {
             map.put("fk_id_program", studySheetDto.getFk_id_program());
@@ -148,13 +143,6 @@ public class StudySheetController {
             studySheetDto.setEndDate(endDate);
         } catch (ParseException e) {
             e.printStackTrace();
-        }
-
-        if (dataObj.has("fk_id_person")) {
-            JSONObject personObj = dataObj.getJSONObject("fk_id_person");
-            PersonDto personDto = new PersonDto();
-            personDto.setId(personObj.getLong("id"));
-            studySheetDto.setFk_id_person(personDto);
         }
 
         if (dataObj.has("fk_id_program")){
