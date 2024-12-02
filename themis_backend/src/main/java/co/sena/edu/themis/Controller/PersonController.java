@@ -46,6 +46,17 @@ public class PersonController {
         }
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Map<String, Object>> getPersonByEmail(@PathVariable String email) {
+        try {
+            PersonDto personDto = personBusiness.getPersonByEmail(email);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("Person retrieved successfully", convertPersonDtoToMap(personDto), HttpStatus.OK));
+        } catch (CustomException e) {
+            return handleCustomException(e);
+        }
+    }
+
+
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createPerson(@RequestBody Map<String, Object> map) {
         try {

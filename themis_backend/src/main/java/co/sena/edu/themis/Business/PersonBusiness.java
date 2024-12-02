@@ -59,15 +59,39 @@ public class PersonBusiness {
         }
     }
 
+    public PersonDto getPersonByEmail(String email) {
+        try {
+            Person person = personService.findByEmail(email);
+            if (person == null) {
+                throw new CustomException("Not Found", "No person found with that email", HttpStatus.NOT_FOUND);
+            }
+            return modelMapper.map(person, PersonDto.class);
+        } catch (Exception e) {
+            logger.error("Error retrieving person by email: " + e.getMessage(), e);
+            throw new CustomException("Error", "Error retrieving person by email", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     public boolean createPerson(PersonDto personDto) {
         try {
+            // Mapear el DTO a la entidad
             Person person = modelMapper.map(personDto, Person.class);
+
+            // Guardar la persona en la base de datos
             personService.save(person);
             logger.info("Person created successfully");
+
+            // Recuperar el ID de la persona creada utilizando su email
+            Person createdPerson = personService.findByEmail(person.getEmail());
+            if (createdPerson == null) {
+                throw new CustomException("Not Found", "Error retrieving created person", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            // Registrar el ID de la persona creada en los logs
+            logger.info("Created person with ID: " + createdPerson.getId());
             return true;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("Error creating person: " + e.getMessage(), e);
             throw new CustomException("Error", "Error creating person", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

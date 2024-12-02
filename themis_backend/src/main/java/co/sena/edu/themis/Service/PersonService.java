@@ -32,6 +32,10 @@ public class PersonService implements Idao<Person, Long> {
         personRepository.save(person);
     }
 
+    public Person findByEmail(String email) {
+        return personRepository.findByEmail(email);
+    }
+
     @Override
     public void deleteById(Long id) {
         personRepository.deleteById(id);
