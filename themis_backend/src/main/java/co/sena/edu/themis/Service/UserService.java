@@ -26,6 +26,10 @@ public class UserService implements Idao<User, Long> {
         return userRepository.getById(id);
     }
 
+    public User findByPersonId(Long id) {
+        return userRepository.findByPersonId(id);
+    }
+
     @Override
     public void save(User user) {
         userRepository.save(user);

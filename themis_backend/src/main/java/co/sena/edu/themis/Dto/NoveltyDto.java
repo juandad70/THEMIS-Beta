@@ -19,5 +19,5 @@ public class NoveltyDto {
     private String noveltyFiles;
     private NoveltyTypeDto fk_id_novelty_type;
     private PersonDto fk_id_person;
-    private CoordinationDto fk_id_coordination;
+    private ApprenticeDto fk_id_apprentice;
 }

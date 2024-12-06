@@ -50,6 +50,16 @@ public class UserController {
         }
     }
 
+    @GetMapping("/findPersonById/{id}")
+    public ResponseEntity<Map<String, Object>> getPersonById(@PathVariable Long id) {
+        try {
+            UserDto userDto = userBusiness.findByPersonId(id);
+            return ResponseEntity.ok(ResponseHttpApi.responseHttpFindById("User - Person retrived successfully", convertUserDtoToMap(userDto), HttpStatus.OK));
+        } catch (CustomException e) {
+            return handleCustomException(e);
+        }
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createUser(@RequestBody Map<String, Object> json) {
         try {

@@ -24,11 +24,8 @@ public class Coordination implements Serializable {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_id_committee", referencedColumnName = "id")
+    @JoinColumn(name = "fk_id_committee", referencedColumnName = "id", nullable = true)
     private Committee fk_id_committee;
-
-    @OneToMany(mappedBy = "fk_id_coordination", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Novelty> noveltyList;
 
     @OneToMany(mappedBy = "fk_id_coordination", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Program> programList;

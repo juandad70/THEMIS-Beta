@@ -69,6 +69,24 @@ public class UserBusiness {
         }
     }
 
+    public UserDto findByPersonId(Long id) {
+        try {
+            User user = userService.findByPersonId(id);
+            logger.info("User: {}" + user);
+            if (user != null) {
+                return modelMapper.map(user, UserDto.class);
+            } else {
+                throw new CustomException("Not Found", "Not found user - person with that id", HttpStatus.NOT_FOUND);
+            }
+        } catch (EntityNotFoundException entNotFound) {
+            logger.info(entNotFound.getMessage());
+            throw new CustomException("Not found", "Not found user - person with that id", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new CustomException("Error", "Error getting user - person by id", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public boolean createUser(UserDto userDto) {
         try {
             User user = modelMapper.map(userDto, User.class);

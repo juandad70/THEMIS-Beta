@@ -2,10 +2,7 @@ package co.sena.edu.themis.Controller;
 
 import co.sena.edu.themis.Business.NoveltyBusiness;
 
-import co.sena.edu.themis.Dto.CoordinationDto;
-import co.sena.edu.themis.Dto.NoveltyDto;
-import co.sena.edu.themis.Dto.NoveltyTypeDto;
-import co.sena.edu.themis.Dto.PersonDto;
+import co.sena.edu.themis.Dto.*;
 import co.sena.edu.themis.Util.Exception.CustomException;
 import co.sena.edu.themis.Util.Http.ResponseHttpApi;
 import org.json.JSONObject;
@@ -86,6 +83,24 @@ public class NoveltyController {
         }
     }
 
+    @PutMapping("/updateState/{id}")
+    public ResponseEntity<Map<String, Object>> updateStateNovelty(@PathVariable Long id, @RequestBody Map<String, Object> json) {
+        try {
+            NoveltyDto noveltyDto = convertMapForNoveltyState(json);
+            noveltyDto.setId(id);
+            boolean stateUpdated = noveltyBusiness.updateStateNovelty(noveltyDto);
+
+            if (stateUpdated) {
+                return ResponseEntity.ok(ResponseHttpApi.responseHttpPut("Novelty state updated successfully", HttpStatus.OK));
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ResponseHttpApi.responseHttpError("Novelty state update failed", HttpStatus.INTERNAL_SERVER_ERROR, "UpdateError"));
+            }
+        } catch (CustomException customE) {
+            return handleCustomException(customE);
+        }
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, Object>> deleteNovelty(@PathVariable Long id) {
         try {
@@ -124,11 +139,11 @@ public class NoveltyController {
             map.put("fk_id_person", null);
         }
 
-        //Mapeo de llave foranea de fk_id_coordination
-        if (noveltyDto.getFk_id_coordination() != null) {
-            map.put("fk_id_coordination", noveltyDto.getFk_id_coordination());
-        } else  {
-            map.put("fk_id_coordination", null);
+        //Mapeo llave foranea de fk_id_apprentice
+        if (noveltyDto.getFk_id_apprentice() != null) {
+            map.put("fk_id_apprentice", noveltyDto.getFk_id_apprentice());
+        } else {
+            map.put("fk_id_apprentice", null);
         }
 
         return map;
@@ -167,14 +182,29 @@ public class NoveltyController {
             noveltyDto.setFk_id_person(personDto);
         }
 
-        // Coordination
-        if (dataObj.has("fk_id_coordination")) {
-            JSONObject coordinationObj = dataObj.getJSONObject("fk_id_coordination");
-            CoordinationDto coordinationDto = new CoordinationDto();
-            coordinationDto.setId(coordinationObj.getLong("id"));
-            noveltyDto.setFk_id_coordination(coordinationDto);
+        // Apprentice
+        if (dataObj.has("fk_id_apprentice")) {
+            JSONObject apprenticeObj = dataObj.getJSONObject("fk_id_apprentice");
+            ApprenticeDto apprenticeDto = new ApprenticeDto();
+            apprenticeDto.setId(apprenticeObj.getLong("id"));
+            noveltyDto.setFk_id_apprentice(apprenticeDto);
         }
         return noveltyDto;
+    }
+
+    private NoveltyDto convertMapForNoveltyState(Map<String, Object> map) {
+        if (map.containsKey("data")) {
+            Map<String, Object> data = (Map<String, Object>) map.get("data");
+            if (data.containsKey("status")) {
+                NoveltyDto noveltyDto = new NoveltyDto();
+                noveltyDto.setStatus((String) data.get("status"));
+                return noveltyDto;
+            } else {
+                throw new CustomException("Bad Request", "The 'status' field is required inside 'data'", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            throw new CustomException("Bad Request", "The 'data' field is required", HttpStatus.BAD_REQUEST);
+        }
     }
 
     private ResponseEntity<Map<String, Object>> handleCustomException(CustomException e) {

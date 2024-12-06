@@ -28,7 +28,7 @@ public class Program implements Serializable {
     @Column(name = "status", nullable = false, length = 55)
     private String status;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_id_coordination", referencedColumnName = "id")
     private Coordination fk_id_coordination;
 

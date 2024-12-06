@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class User {
             joinColumns = @JoinColumn(name = "fk_id_user", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "fk_id_role", referencedColumnName = "id")
     )
+    @ToString.Exclude
     private List<Role> roleList;
 
     @OneToOne

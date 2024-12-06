@@ -104,6 +104,27 @@ public class NoveltyBusiness {
         }
     }
 
+    public boolean updateStateNovelty(NoveltyDto noveltyDto) {
+        try {
+            if (noveltyDto.getId() == null) {
+                logger.info("Can't update state to novelty because the id is null");
+            }
+
+            Novelty existingNovelty = noveltyService.getById(noveltyDto.getId());
+            logger.info("Novelty to update state: " + existingNovelty);
+
+            existingNovelty.setStatus(noveltyDto.getStatus());
+            noveltyService.save(existingNovelty);
+            return true;
+        } catch (EntityNotFoundException entNotFound) {
+            logger.info("The novelty you are trying to update the state is not registered");
+            throw new CustomException("Not Found", "Can't update the state for novelty because it isn't registered", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new CustomException("Error", "Error updating the state of the novelty", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public boolean deleteNoveltyById(Long id) {
         try {
             if (id == null) {

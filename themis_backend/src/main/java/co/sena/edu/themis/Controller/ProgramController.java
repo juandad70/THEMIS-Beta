@@ -119,7 +119,7 @@ public class ProgramController {
         if (dataObj.has("fk_id_coordination")){
             JSONObject coordinationObj = dataObj.getJSONObject("fk_id_coordination");
             CoordinationDto coordinationDto = new CoordinationDto();
-            coordinationDto.setId(dataObj.getLong("id"));
+            coordinationDto.setId(coordinationObj.getLong("id"));
             programDto.setFk_id_coordination(coordinationDto);
         }
         return programDto;

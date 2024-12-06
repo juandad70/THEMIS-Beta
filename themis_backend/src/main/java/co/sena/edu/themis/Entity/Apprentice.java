@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @Entity
 @Table(name = "apprentices") // Cambié el nombre de la tabla para que esté en plural
 @NoArgsConstructor
@@ -24,10 +26,13 @@ public class Apprentice {
     @ToString.Exclude
     private Person fk_id_person; // Relación con la entidad Persona (persona_id)
 
-    // Relación con el 'StudySheet' - un aprendiz pertenece a una hoja de estudios
+    // Relación con el 'StudySheet' - un aprendiz pertenece a una ficha
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_id_study_sheet", referencedColumnName = "id")
+    @ToString.Exclude
     private StudySheet fk_id_study_sheet;
 
-
+    @OneToMany(mappedBy = "fk_id_apprentice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Novelty> noveltyList;
 }
